@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/App';
+import App from './components/App/App';
 import reportWebVitals from './reportWebVitals';
+import 'jquery/dist/jquery.min'
+import 'font-awesome/css/font-awesome.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.css';
+import 'bootstrap/dist/js/bootstrap.min';
 
 ReactDOM.render(
   <React.StrictMode>
