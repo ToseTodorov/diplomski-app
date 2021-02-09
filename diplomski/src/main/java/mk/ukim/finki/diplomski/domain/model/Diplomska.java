@@ -6,6 +6,7 @@ import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -59,5 +60,43 @@ public class Diplomska extends AbstractEntity<DiplomskaId> {
 
     @Embedded
     private Status currentStatus;
+
+    public Diplomska(UserId mentorId, UserId firstMemberId, UserId secondMemberId, UserId studentId,
+                     Title title, Scope scope, Description description) {
+        this.mentorId = mentorId;
+        this.firstMemberId = firstMemberId;
+        this.secondMemberId = secondMemberId;
+        this.studentId = studentId;
+        this.title = title;
+        this.scope = scope;
+        this.description = description;
+        this.submissionDate = LocalDate.now();
+        this.currentStatus = new Status(LocalDate.now(), 0);
+    }
+
+    public void updateStatus(){
+        this.currentStatus = new Status(LocalDate.now(), this.currentStatus.getStatus()+1);
+        // TODO: send email
+    }
+
+    public void updateFilePath(String filePath){
+        this.filePath = new FilePath(filePath);
+    }
+
+    public void updateGrade(int grade){
+        this.grade = new Grade(grade);
+    }
+
+    public void updateFirstMemberNote(String note){
+        this.firstMemberNote = new Note(note);
+    }
+
+    public void updateSecondMemberNote(String note){
+        this.secondMemberNote = new Note(note);
+    }
+
+    public void updateOdbranaInfo(LocalDateTime dateTime, String location){
+        this.odbranaInfo = new Odbrana(dateTime, location);
+    }
 
 }

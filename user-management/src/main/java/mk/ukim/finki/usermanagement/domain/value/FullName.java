@@ -37,4 +37,8 @@ public class FullName implements ValueObject {
         return Objects.hash(firstName, lastName);
     }
 
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 }

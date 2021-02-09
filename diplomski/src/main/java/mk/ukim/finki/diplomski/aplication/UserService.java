@@ -1,11 +1,8 @@
 package mk.ukim.finki.diplomski.aplication;
 
-
-
 import mk.ukim.finki.diplomski.domain.value.UserId;
 import mk.ukim.finki.sharedkernel.domain.user.Username;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -16,5 +13,9 @@ public interface UserService {
     Username findUsernameByUserId(UUID userId);
 
     UUID findRoleIdByUserId(UUID userId);
+
+    UUID findUserIdByUsername(String username);
+
+    String findFullNameByUserId(UUID userId);
 
 }

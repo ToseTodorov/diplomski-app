@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,21 @@ public class UserController {
     public ResponseEntity<UUID> findRoleByUserOd(@PathVariable("id") UUID userId) {
         User user = userRepository.findById(new UserId(userId)).orElseThrow(UserNotFoundException::new);
         return ResponseEntity.ok(user.getRole().id().getId());
+    }
+
+    @GetMapping("/{username}/id")
+    public ResponseEntity<UUID> findUserIdByUsername(@PathVariable("username") String username) {
+        return ResponseEntity.ok(userRepository.findIdByUsername(new Username(username)).getId());
+    }
+
+    @GetMapping("/{id}/fullname")
+    public ResponseEntity<String> findFullnameByUserId(@PathVariable("id") UUID userId) {
+        Optional<User> user = userRepository.findById(new UserId(userId));
+        if (user.isPresent()){
+            return ResponseEntity.ok(user.get().getFullName().toString());
+        }
+
+        return ResponseEntity.notFound().build();
     }
 
 }
