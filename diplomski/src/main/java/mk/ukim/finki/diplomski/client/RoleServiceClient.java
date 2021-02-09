@@ -19,9 +19,9 @@ public class RoleServiceClient implements RoleService {
     private final RestTemplate restTemplate;
     private final String serverUrl;
 
-    public RoleServiceClient(@Value("${app.product-catalog.url}") String serverUrl,
-                             @Value("${app.product-catalog.connect-timeout-ms}") int connectTimeout,
-                             @Value("${app.product-catalog.read-timeout-ms}") int readTimeout){
+    public RoleServiceClient(@Value("${app.user-management.url}") String serverUrl,
+                             @Value("${app.user-management.connect-timeout-ms}") int connectTimeout,
+                             @Value("${app.user-management.read-timeout-ms}") int readTimeout){
         this.serverUrl = serverUrl;
         this.restTemplate = new RestTemplate();
 

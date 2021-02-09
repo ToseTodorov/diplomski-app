@@ -23,9 +23,9 @@ public class UserServiceClient implements UserService {
     private final RestTemplate restTemplate;
     private final String serverUrl;
 
-    public UserServiceClient(@Value("${app.product-catalog.url}") String serverUrl,
-                             @Value("${app.product-catalog.connect-timeout-ms}") int connectTimeout,
-                             @Value("${app.product-catalog.read-timeout-ms}") int readTimeout){
+    public UserServiceClient(@Value("${app.user-management.url}") String serverUrl,
+                             @Value("${app.user-management.connect-timeout-ms}") int connectTimeout,
+                             @Value("${app.user-management.read-timeout-ms}") int readTimeout){
         this.serverUrl = serverUrl;
         this.restTemplate = new RestTemplate();
 
