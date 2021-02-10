@@ -1,6 +1,7 @@
 package mk.ukim.finki.usermanagement.rest;
 
 
+import mk.ukim.finki.sharedkernel.domain.dto.UserDTO;
 import mk.ukim.finki.sharedkernel.domain.user.Username;
 import mk.ukim.finki.usermanagement.domain.exception.UserNotFoundException;
 import mk.ukim.finki.usermanagement.domain.model.User;
@@ -63,7 +64,7 @@ public class UserController {
 
     @GetMapping("/{username}/id")
     public ResponseEntity<UUID> findUserIdByUsername(@PathVariable("username") String username) {
-        return ResponseEntity.ok(userRepository.findIdByUsername(new Username(username)).getId());
+        return ResponseEntity.ok(userRepository.findUserByUsername(new Username(username)).get().id().getId());
     }
 
     @GetMapping("/{id}/fullname")
@@ -74,6 +75,14 @@ public class UserController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/api/users/role/%s/")
+    public List<UserDTO> findUsersByRole(@PathVariable("roleId") UUID roleId){
+        List<User> usersWithRole = userRepository.findAllByRole_Id(new RoleId(roleId));
+        return usersWithRole.stream()
+                .map(user -> new UserDTO(user.id().getId(), user.getUsername().getUsername(), user.getFullName().toString()))
+                .collect(Collectors.toList());
     }
 
 }
