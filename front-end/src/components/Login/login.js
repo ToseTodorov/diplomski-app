@@ -18,8 +18,7 @@ const Login = (props) => {
         Auth.login(request).then((response) => {
                 localStorage.setItem(LOGGED_IN_USER, response.data.userId);
                 localStorage.setItem(LOGGED_IN_ROLE, response.data.roleName);
-                // TODO: go to logirani site diplomski
-                // props.history.push('turniri');
+                props.history.push('/diplomski');
             });
     };
 

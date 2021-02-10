@@ -94,6 +94,7 @@ public class DiplomskiService {
         dto.setFirstMember(tmp.getFirstMember());
         dto.setSecondMember(tmp.getSecondMember());
         dto.setTitle(tmp.getTitle());
+        // TODO: no time; not date; handling
         dto.setTime(diplomska.getOdbranaInfo().getDateTime().format(DateTimeFormatter.ofPattern("HH:mm")));
         dto.setDate(diplomska.getOdbranaInfo().getDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
 

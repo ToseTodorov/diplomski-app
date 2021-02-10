@@ -26,13 +26,13 @@ public class DiplomskiController {
         this.diplomskiService = diplomskiService;
     }
 
-    @GetMapping("/DiplomaList")
+    @GetMapping("/diploma-list")
     public ResponseEntity<List<DiplomskaDTO>> getAllDiplomski() {
         List<DiplomskaDTO> diplomski = diplomskiService.getAllDiplomski();
         return ResponseEntity.ok(diplomski);
     }
 
-    @GetMapping("/StartPage/DiplomaList")
+    @GetMapping("/public-dimploma-list")
     public ResponseEntity<List<DiplomskaPublicDTO>> getAllDiplomskiPublic() {
         List<DiplomskaPublicDTO> diplomski = diplomskiService.getAllDiplomskiPublic();
         return ResponseEntity.ok(diplomski);
