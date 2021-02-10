@@ -7,16 +7,14 @@ import mk.ukim.finki.usermanagement.domain.model.Role;
 import mk.ukim.finki.usermanagement.domain.repository.RoleRepository;
 import mk.ukim.finki.usermanagement.domain.value.RoleId;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/roles")
+@CrossOrigin(origins = "*")
 public class RoleController {
 
     private final RoleRepository roleRepository;
@@ -48,4 +46,30 @@ public class RoleController {
         Role role = roleRepository.findById(new RoleId(roleId)).orElseThrow(RoleNotFoundException::new);
         return ResponseEntity.ok(role.getRoleName());
     }
+
+//    @GetMapping("/populate")
+//    public ResponseEntity<String> createRoles(){
+//        Role assistant = new Role();
+//        assistant.setRoleName(RoleName.ASSISTANT);
+//        this.roleRepository.save(assistant);
+//
+//        Role prodekan = new Role();
+//        prodekan.setRoleName(RoleName.PRODEKAN);
+//        this.roleRepository.save(prodekan);
+//
+//        Role professor = new Role();
+//        professor.setRoleName(RoleName.PROFESSOR);
+//        this.roleRepository.save(professor);
+//
+//        Role stSluzba = new Role();
+//        stSluzba.setRoleName(RoleName.ST_SLUZBA);
+//        this.roleRepository.save(stSluzba);
+//
+//        Role student = new Role();
+//        student.setRoleName(RoleName.STUDENT);
+//        this.roleRepository.save(student);
+//
+//        this.roleRepository.flush();
+//        return ResponseEntity.ok("YAYY!!");
+//    }
 }

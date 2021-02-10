@@ -21,6 +21,10 @@ public class Username implements ValueObject {
     @Column(name = "username", nullable = false)
     private final String username;
 
+    public Username() {
+        this.username = null;
+    }
+
     public Username(@NonNull String username) {
         if(!username.matches(USERNAME_REGEX)){
            throw new UsernameNotValidException("Username not valid: " + username);

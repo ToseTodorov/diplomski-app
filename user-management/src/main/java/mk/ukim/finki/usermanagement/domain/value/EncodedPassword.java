@@ -20,6 +20,10 @@ public class EncodedPassword implements ValueObject {
     @Column(name = "password", nullable = false)
     private final String password;
 
+    public EncodedPassword(){
+        this.password = null;
+    }
+
     public EncodedPassword(@NonNull String password) {
         this.password = password;
     }

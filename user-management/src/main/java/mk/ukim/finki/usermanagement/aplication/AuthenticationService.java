@@ -33,11 +33,12 @@ public class AuthenticationService {
 
     public User login(@NonNull LoginForm loginForm){
         User user = userRepository.findUserByUsername(new Username(loginForm.getUsernameOrEmail()))
-                .orElse(userRepository.findUserByEmail(new Email(loginForm.getUsernameOrEmail())).orElseThrow(UserNotFoundException::new));
+                .orElseGet(() -> userRepository.findUserByEmail(new Email(loginForm.getUsernameOrEmail()))
+                        .orElseThrow(UserNotFoundException::new));
 
 
-        EncodedPassword password = new EncodedPassword(passwordEncoder.encode(loginForm.getPassword()));
-        if(!user.login(password)) {
+        // EncodedPassword password = new EncodedPassword(passwordEncoder.encode(loginForm.getPassword()));
+        if(!passwordEncoder.matches(loginForm.getPassword(), user.getEncodedPassword().getPassword())) {
             throw new PasswordException("Wrong password");
         }
 
@@ -55,7 +56,7 @@ public class AuthenticationService {
         Role role = roleRepository.findById(new RoleId(userForm.getRoleId())).orElseThrow(RoleNotFoundException::new);
         User user = User.signUp(fullName, username, email, password, role);
 
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
         return user;
     }
 

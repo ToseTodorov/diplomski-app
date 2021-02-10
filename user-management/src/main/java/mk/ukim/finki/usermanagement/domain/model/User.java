@@ -37,10 +37,12 @@ public class User extends AbstractEntity<UserId> {
     private Role role;
 
     public User() {
+        super(new UserId());
     }
 
     private User(@NonNull FullName fullName, @NonNull Username username,
                  @NonNull Email email, @NonNull EncodedPassword encodedPassword, @NonNull Role role) {
+        super(new UserId());
         this.fullName = fullName;
         this.username = username;
         this.email = email;

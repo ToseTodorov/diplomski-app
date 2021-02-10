@@ -21,6 +21,10 @@ public class Email implements ValueObject {
     @Column(name = "email", nullable = false)
     private final String email;
 
+    public Email(){
+        this.email = null;
+    }
+
     public Email(@NonNull String email) {
         email = email.trim();
         if(!email.matches(EMAIL_REGEX)){

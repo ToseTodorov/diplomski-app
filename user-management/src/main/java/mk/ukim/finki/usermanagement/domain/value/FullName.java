@@ -18,6 +18,11 @@ public class FullName implements ValueObject {
     @Column(name = "last_name", nullable = false)
     private final String lastName;
 
+    public FullName() {
+        this.firstName = null;
+        this.lastName = null;
+    }
+
     public FullName(@NonNull String firstName, @NonNull String lastName){
         this.firstName = firstName;
         this.lastName = lastName;

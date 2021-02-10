@@ -15,6 +15,7 @@ public abstract class AbstractEntity<ID extends DomainObjectId> implements Ident
     private Long version;
 
     public AbstractEntity() {
+
     }
 
     public AbstractEntity(ID id){
