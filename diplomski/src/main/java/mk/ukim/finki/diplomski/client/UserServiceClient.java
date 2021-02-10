@@ -3,6 +3,7 @@ package mk.ukim.finki.diplomski.client;
 
 import mk.ukim.finki.diplomski.aplication.UserService;
 import mk.ukim.finki.diplomski.domain.value.UserId;
+import mk.ukim.finki.sharedkernel.domain.dto.UserDTO;
 import mk.ukim.finki.sharedkernel.domain.user.Username;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -114,6 +115,24 @@ public class UserServiceClient implements UserService {
                     }).getBody();
         } catch (Exception ex) {
             System.err.printf("Error retrieving username by id; %s\n", ex);
+            return null;
+        }
+    }
+
+    @Override
+    public List<UserDTO> findAllUsersByRoleId(UUID roleId) {
+        try {
+            // /api/users/role/{roleId}/ids
+            return Objects.requireNonNull(
+                    restTemplate.exchange(
+                            uri().path(String.format("/api/users/role/%s/ids", roleId.toString())).build().toUri(),
+                            HttpMethod.GET,
+                            null,
+                            new ParameterizedTypeReference<List<UserDTO>>() {}
+                    ).getBody()
+            );
+        } catch (Exception ex) {
+            System.err.printf("Error retrieving users by id; %s\n", ex);
             return null;
         }
     }

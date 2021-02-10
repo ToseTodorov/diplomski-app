@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, UserId> {
 
     List<User> findAllByRole_Id(DomainObjectId roleId);
 
-    @Query("SELECT user.username FROM User user where user.id = :userId")
+    @Query("SELECT user.username FROM User user where user.id = :userId") // not working?
     Optional<Username> findUsernameById(@Param("userId") UserId userId);
 
     UserId findIdByUsername(Username username);

@@ -1,6 +1,8 @@
 package mk.ukim.finki.diplomski.domain.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import mk.ukim.finki.diplomski.domain.value.*;
 import mk.ukim.finki.sharedkernel.domain.base.AbstractEntity;
 
@@ -10,8 +12,13 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@Setter
 @Table(name = "diplomski")
 public class Diplomska extends AbstractEntity<DiplomskaId> {
+
+    public Diplomska() {
+        super(new DiplomskaId());
+    }
 
     @Embedded
     @AttributeOverride(name = "id", column = @Column(name = "mentor_id", nullable = false))
