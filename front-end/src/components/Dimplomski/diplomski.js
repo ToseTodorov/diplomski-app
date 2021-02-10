@@ -14,7 +14,6 @@ class Diplomski extends Component {
     }
 
     componentDidMount() {
-        debugger;
         if(this.props.isUserLoggedIn()){
             diplomskiService.getDiplomaList().then((response) => {
                 console.log("PRIVATE DIPLOMSKI");

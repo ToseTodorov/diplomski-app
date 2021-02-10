@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Mentorship = () => {
+const Komisija = () => {
     return (
         <div>
-
+            
         </div>
     );
 };
 
-export default Mentorship;
+export default Komisija;

@@ -1,6 +1,6 @@
 import React from 'react';
 import Auth from '../../service/authService'
-import {LOGGED_IN_USER} from '../../constants'
+import {withRouter} from "react-router";
 
 const Login = (props) => {
 
@@ -21,8 +21,7 @@ const Login = (props) => {
                     userId: response.data.userId,
                     roleName: response.data.roleName
                 };
-                localStorage.setItem(LOGGED_IN_USER, JSON.stringify(user));
-                props.history.push('/diplomski');
+                props.login(user);
             });
     };
 
@@ -37,10 +36,6 @@ const Login = (props) => {
                 <label htmlFor="password">Лозинка:</label>
                 <input id="password" className="form-control text-center" type="password" placeholder="******"/>
                 <hr/>
-                <div id="message" hidden>
-                    <p className="text-danger"><b>Невалидни внесени податоци</b></p>
-                </div>
-                <br/>
                 <div className="col-sm-8 ml-auto mr-auto">
                     <button type={'submit'} className="btn btn-primary btn-block">Логирај се</button>
                 </div>
@@ -49,4 +44,4 @@ const Login = (props) => {
     );
 }
 
-export default Login;
+export default withRouter(Login);
