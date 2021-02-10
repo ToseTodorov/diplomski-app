@@ -1,12 +1,12 @@
 import {diplomskiApi, userManagementApi} from "../custom-axios/axios";
-import {LOGGED_IN_USER, LOGGED_IN_ROLE} from "../constants"
+import {LOGGED_IN_USER} from "../constants"
 
 export const userManagementApiUtils = {
     get: (url) => {
         return userManagementApi.get(url, {
             headers: {
-                'user': user(),
-                'role': role()
+                'user': user().userId,
+                'role': user().roleName
             }
         })
     },
@@ -15,8 +15,8 @@ export const userManagementApiUtils = {
         return userManagementApi.post(url, data, {
             headers: {
                 'content-type': 'application/json',
-                'user': user(),
-                'role': role()
+                'user': user().userId,
+                'role': user().roleName
             }
         })
     }
@@ -26,8 +26,8 @@ export const diplomskiApiUtils = {
     get: (url) => {
         return diplomskiApi.get(url, {
             headers: {
-                'user': user(),
-                'role': role()
+                'user': user().userId,
+                'role': user().roleName
             }
         })
     },
@@ -36,8 +36,8 @@ export const diplomskiApiUtils = {
         return diplomskiApi.post(url, data, {
             headers: {
                 'content-type': 'application/json',
-                'user': user(),
-                'role': role()
+                'user': user().userId,
+                'role': user().roleName
             }
         })
     }
@@ -45,14 +45,10 @@ export const diplomskiApiUtils = {
 
 function user() {
     if(localStorage.getItem(LOGGED_IN_USER)) {
-        return localStorage.getItem(LOGGED_IN_USER);
+        return JSON.parse(localStorage.getItem(LOGGED_IN_USER));
     }
-    return '';
-}
-
-function role(){
-    if(localStorage.getItem(LOGGED_IN_ROLE)) {
-        return localStorage.getItem(LOGGED_IN_ROLE);
-    }
-    return '';
+    return {
+        userId: '',
+        roleName: ''
+    };
 }

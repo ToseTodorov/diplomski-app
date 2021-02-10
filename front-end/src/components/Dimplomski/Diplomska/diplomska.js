@@ -1,11 +1,11 @@
 import React from 'react';
+import './diplomska.css'
 
 const Diplomska = (props) => {
     let currentDiplomska = props.data;
 
     let userSpecificRows =
-        <div>
-            <tr>
+            [<tr>
                 <td style={{width: "30%"}}>
                     <span className="fa fa-calendar"/>&nbsp;
                     Датум на одбрана
@@ -13,7 +13,7 @@ const Diplomska = (props) => {
                 <td>
                     <strong>{currentDiplomska.date}</strong>
                 </td>
-            </tr>
+            </tr>,
             <tr>
                 <td style={{width: "30%"}}>
                     <span className="fa fa-clock-o"/>&nbsp;
@@ -22,8 +22,7 @@ const Diplomska = (props) => {
                 <td>
                     <strong>{currentDiplomska.time}</strong>
                 </td>
-            </tr>
-        </div>;
+            </tr>];
 
     if (props.isUserLoggedIn()) {
         let file =
@@ -37,7 +36,7 @@ const Diplomska = (props) => {
                 </a>;
         }
         userSpecificRows =
-            <div>
+            [
                 <tr>
                     <td style={{width: "30%"}}>
                         <span className="fa fa-clock-o"/>&nbsp;
@@ -46,7 +45,7 @@ const Diplomska = (props) => {
                     <td>
                         <strong>{currentDiplomska.date}</strong>
                     </td>
-                </tr>
+                </tr>,
                 <tr>
                     <td style={{width: "30%"}}>
                         <span className="fa fa-thumbs-up"/>&nbsp;
@@ -55,7 +54,7 @@ const Diplomska = (props) => {
                     <td>
                         <strong>{currentDiplomska.status}</strong>
                     </td>
-                </tr>
+                </tr>,
                 <tr>
                     <td style={{width: "30%"}}>
                         <span className="fa fa-cloud-download"/>&nbsp;
@@ -66,7 +65,7 @@ const Diplomska = (props) => {
                             {file}
                         </strong>
                     </td>
-                </tr>
+                </tr>,
                 <tr>
                     <td style={{width: "30%"}}>
                         <span className="fa fa-level-up"/>&nbsp;
@@ -76,7 +75,7 @@ const Diplomska = (props) => {
                         <strong>{currentDiplomska.description}</strong>
                     </td>
                 </tr>
-            </div>;
+            ];
     }
 
     return (
@@ -85,7 +84,7 @@ const Diplomska = (props) => {
                 <b>{currentDiplomska.title}</b>
             </div>
             <div className="panel-body">
-                <table className="table table-bordered table-striped table-condensed table-responsive">
+                <table className="table table-bordered table-striped table-condensed ">
                     <tbody>
                     <tr>
                         <td style={{width: "30%"}}>

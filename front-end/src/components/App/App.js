@@ -1,9 +1,8 @@
 import React from "react";
 import Header from "../Header/Header";
-import logo from "../../logo.svg";
 import Login from "../Login/login";
 import Diplomski from "../Dimplomski/diplomski";
-import {LOGGED_IN_USER, LOGGED_IN_ROLE, ROLES} from '../../constants'
+import {LOGGED_IN_USER, ROLES} from '../../constants'
 import {BrowserRouter as Router, Redirect, Route} from 'react-router-dom'
 import {PrivateRoute} from "../PrivateRoute/privateRoute";
 import CreateDiplomska from "../CreateDiplomska/createDiplomska";
@@ -13,16 +12,12 @@ class App extends React.Component{
 
     getCurrentUser = () => {
         if(localStorage.getItem(LOGGED_IN_USER))
-            return {
-                userId: localStorage.getItem(LOGGED_IN_USER),
-                roleName: localStorage.getItem(LOGGED_IN_ROLE)
-            };
+            return JSON.parse(localStorage.getItem(LOGGED_IN_USER));
         return null;
     }
 
     logout = () => {
         localStorage.removeItem(LOGGED_IN_USER);
-        localStorage.removeItem(LOGGED_IN_ROLE);
     }
 
     render() {

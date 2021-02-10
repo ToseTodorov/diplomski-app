@@ -1,6 +1,6 @@
 import React from 'react';
 import Auth from '../../service/authService'
-import {LOGGED_IN_USER, LOGGED_IN_ROLE} from '../../constants'
+import {LOGGED_IN_USER} from '../../constants'
 
 const Login = (props) => {
 
@@ -15,9 +15,13 @@ const Login = (props) => {
             password: pass.value
         };
 
-        Auth.login(request).then((response) => {
-                localStorage.setItem(LOGGED_IN_USER, response.data.userId);
-                localStorage.setItem(LOGGED_IN_ROLE, response.data.roleName);
+        Auth.login(request)
+            .then((response) => {
+                const user = {
+                    userId: response.data.userId,
+                    roleName: response.data.roleName
+                };
+                localStorage.setItem(LOGGED_IN_USER, JSON.stringify(user));
                 props.history.push('/diplomski');
             });
     };

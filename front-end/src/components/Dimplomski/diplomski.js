@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {LOGGED_IN_USER} from '../../constants'
 import diplomskiService from '../../service/diplomskiService'
 import './diplomski.css'
 import Diplomska from "./Diplomska/diplomska";
@@ -15,6 +14,7 @@ class Diplomski extends Component {
     }
 
     componentDidMount() {
+        debugger;
         if(this.props.isUserLoggedIn()){
             diplomskiService.getDiplomaList().then((response) => {
                 console.log("PRIVATE DIPLOMSKI");
