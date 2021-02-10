@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {LOGGED_IN_USER} from '../../constants'
-import {diplomskiService} from '../../service/diplomskiService'
+import diplomskiService from '../../service/diplomskiService'
 import './diplomski.css'
 import Diplomska from "./Diplomska/diplomska";
 
