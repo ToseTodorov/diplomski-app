@@ -57,7 +57,7 @@ public class DiplomskiService {
 
     private String mapStudent(UUID studentId){
         String student = "";
-        student += userService.findUsernameByUserId(studentId);
+        student += userService.findUsernameByUserId(studentId).getUsername();
         student += " - " + userService.findFullNameByUserId(studentId);
 
         return student;
@@ -203,7 +203,7 @@ public class DiplomskiService {
         diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
         diplomskiRepository.saveAndFlush(diplomska1);
 
-        new Diplomska();
+        diplomska1 = new Diplomska();
         diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
         diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
         diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
@@ -237,7 +237,7 @@ public class DiplomskiService {
         diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
         diplomskiRepository.saveAndFlush(diplomska1);
 
-        new Diplomska();
+        diplomska1 = new Diplomska();
         diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
         diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
         diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
@@ -271,7 +271,7 @@ public class DiplomskiService {
         diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
         diplomskiRepository.saveAndFlush(diplomska1);
 
-        new Diplomska();
+        diplomska1 = new Diplomska();
         diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
         diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
         diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));

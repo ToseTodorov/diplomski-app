@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/diplomski")
-
+@CrossOrigin(origins = "*")
 public class DiplomskiController {
 
     private final DiplomskiService diplomskiService;
@@ -36,7 +36,7 @@ public class DiplomskiController {
         return ResponseEntity.ok(diplomski);
     }
 
-    @GetMapping("/public-dimploma-list")
+    @GetMapping("/public-diploma-list")
     public ResponseEntity<List<DiplomskaPublicDTO>> getAllDiplomskiPublic() {
         List<DiplomskaPublicDTO> diplomski = diplomskiService.getAllDiplomskiPublic();
         return ResponseEntity.ok(diplomski);
