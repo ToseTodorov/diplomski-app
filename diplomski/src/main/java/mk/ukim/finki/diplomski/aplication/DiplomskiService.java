@@ -329,6 +329,15 @@ public class DiplomskiService {
         return getAllDiplomskiByStatus(new Status(LocalDate.now(), 2));
     }
 
+    public List<DiplomskaFullDTO> getDiplomskiForValidationBySluzbaOdbrana(UUID userId) {
+        if (!isInRole(new UserId(userId), RoleName.ST_SLUZBA)){
+            throw new RuntimeException("Not authorized");
+            // TODO: exception
+        }
+
+        return getAllDiplomskiByStatus(new Status(LocalDate.now(), 6));
+    }
+
     public List<DiplomskaFullDTO> getDiplomskiForValidationByProdekan(UUID userId) {
         if (!isInRole(new UserId(userId), RoleName.PRODEKAN)){
             throw new RuntimeException("Not authorized");
@@ -362,6 +371,16 @@ public class DiplomskiService {
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
         // TODO: send mail - student, clenovi
+    }
+
+    public List<DiplomskaFullDTO> getDiplomskiForKomisija(UUID userId) {
+        UserId id = new UserId(userId);
+        List<Diplomska> diplomski = diplomskiRepository.findAllByFirstMemberId(id);
+        diplomski.addAll(diplomskiRepository.findAllBySecondMemberId(id));
+
+        return diplomski.stream()
+                .map(this::mapDiplomskaFullDTO)
+                .collect(Collectors.toList());
     }
 
 

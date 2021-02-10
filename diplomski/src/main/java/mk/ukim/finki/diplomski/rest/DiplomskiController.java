@@ -42,7 +42,7 @@ public class DiplomskiController {
     }
 
     @PostMapping("/submit")
-    public ResponseEntity submitNewDiplomska(@NotNull DiplomskaForm diplomskaForm,
+    public ResponseEntity submitNewDiplomska(@NotNull @RequestBody DiplomskaForm diplomskaForm,
                                              HttpServletRequest request){
         try {
             String userId = request.getHeader("user");
@@ -69,7 +69,7 @@ public class DiplomskiController {
         return ResponseEntity.ok(diplomskiService.getDiplomska(UUID.fromString(diplomskaId)));
     }
 
-    @GetMapping("/diplomska")
+    @GetMapping("/student-diplomska")
     public ResponseEntity<DiplomskaFullDTO> getDiplomskaForStudent(HttpServletRequest request){
         String userId = request.getHeader("user");
         return ResponseEntity.ok(diplomskiService.getDiplomskaForStudent(UUID.fromString(userId)));
@@ -83,7 +83,7 @@ public class DiplomskiController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/sluzba-validation")
+    @GetMapping("/sluzba-validation-prijavuvanje")
     public ResponseEntity<List<DiplomskaFullDTO>> getDiplomskiForValidationBySluzba(HttpServletRequest request){
         String userId = request.getHeader("user");
         return ResponseEntity.ok(diplomskiService.getDiplomskiForValidationBySluzba(UUID.fromString(userId)));
@@ -97,7 +97,7 @@ public class DiplomskiController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/prodekan-validation")
+    @GetMapping("/prodekan-diplomski")
     public ResponseEntity<List<DiplomskaFullDTO>> getDiplomskiForValidationByProdekan(HttpServletRequest request){
         String userId = request.getHeader("user");
         return ResponseEntity.ok(diplomskiService.getDiplomskiForValidationByProdekan(UUID.fromString(userId)));
@@ -127,6 +127,23 @@ public class DiplomskiController {
     }
 
     // TODO: cekor 5
+
+    @GetMapping("/komisija-diplomski")
+    public ResponseEntity<List<DiplomskaFullDTO>> getDiplomskiForKomisija(HttpServletRequest request){
+        String userId = request.getHeader("user");
+        return ResponseEntity.ok(diplomskiService.getDiplomskiForKomisija(UUID.fromString(userId)));
+    }
+
+    @GetMapping("/sluzba-validation-odbrana")
+    public ResponseEntity<List<DiplomskaFullDTO>> getDiplomskiForValidationBySluzbaOdbrana(HttpServletRequest request){
+        String userId = request.getHeader("user");
+        return ResponseEntity.ok(diplomskiService.getDiplomskiForValidationBySluzbaOdbrana(UUID.fromString(userId)));
+    }
+
+
+
+
+
 
 
 

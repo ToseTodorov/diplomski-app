@@ -15,4 +15,8 @@ public interface DiplomskiRepository extends JpaRepository<Diplomska, DiplomskaI
     List<Diplomska> findAllByCurrentStatusEquals(Status status);
 
     List<Diplomska> findAllByMentorId(UserId mentorId);
+
+    List<Diplomska> findAllByFirstMemberId(UserId memberId);
+
+    List<Diplomska> findAllBySecondMemberId(UserId memberId);
 }
