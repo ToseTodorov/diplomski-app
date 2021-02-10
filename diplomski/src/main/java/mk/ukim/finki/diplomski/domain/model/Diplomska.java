@@ -78,7 +78,10 @@ public class Diplomska extends AbstractEntity<DiplomskaId> {
         this.scope = scope;
         this.description = description;
         this.submissionDate = LocalDate.now();
-        this.currentStatus = new Status(LocalDate.now(), 0);
+        this.currentStatus = new Status(LocalDate.now(), 1);
+
+        // initialize empty
+        this.grade = new Grade();
     }
 
     public void updateStatus(){

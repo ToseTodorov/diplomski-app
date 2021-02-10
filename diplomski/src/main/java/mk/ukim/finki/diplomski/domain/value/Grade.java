@@ -7,6 +7,7 @@ import mk.ukim.finki.sharedkernel.domain.base.ValueObject;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -21,16 +22,18 @@ public class Grade implements ValueObject {
     @Transient
     private final String gradeDescription;
 
-    private static Map<Integer, String> gradeMap = new HashMap<>(){
-        {
-            put(5, "пет");
-            put(6, "шест");
-            put(7, "седум");
-            put(8, "осум");
-            put(9, "девет");
-            put(10, "десет");
-        }
-    };
+    private static final Map<Integer, String> gradeMap;
+    static {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(5, "пет");
+        map.put(6, "шест");
+        map.put(7, "седум");
+        map.put(8, "осум");
+        map.put(9, "девет");
+        map.put(10, "десет");
+        gradeMap = Collections.unmodifiableMap(map);
+    }
+
 
     public Grade(){
         this.grade = -1;
@@ -58,5 +61,10 @@ public class Grade implements ValueObject {
     @Override
     public int hashCode() {
         return Objects.hash(grade, gradeDescription);
+    }
+
+    @Override
+    public String toString() {
+        return this.grade + " (" + this.gradeDescription + ")";
     }
 }

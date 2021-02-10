@@ -1,6 +1,7 @@
 package mk.ukim.finki.diplomski.aplication;
 
 import mk.ukim.finki.diplomski.aplication.dto.DiplomskaDTO;
+import mk.ukim.finki.diplomski.aplication.dto.DiplomskaFullDTO;
 import mk.ukim.finki.diplomski.aplication.dto.DiplomskaPublicDTO;
 import mk.ukim.finki.diplomski.aplication.form.DiplomskaForm;
 import mk.ukim.finki.diplomski.domain.model.Diplomska;
@@ -83,10 +84,21 @@ public class DiplomskiService {
         dto.setFirstMember(tmp.getFirstMember());
         dto.setSecondMember(tmp.getSecondMember());
         dto.setTitle(tmp.getTitle());
-        dto.setDate(diplomska.getSubmissionDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
-        dto.setStatus(diplomska.getCurrentStatus().getStatusDescription());
-        dto.setFile(diplomska.getFilePath().getFilePath());
+
+        if (diplomska.getSubmissionDate() == null){
+            dto.setDate("");
+        } else {
+            dto.setDate(diplomska.getSubmissionDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        }
+
+        dto.setStatus(Status.descriptionFromNumber(diplomska.getCurrentStatus().getStatus()));
         dto.setDescription(diplomska.getDescription().getDescription());
+
+        if (diplomska.getFilePath() == null){
+            dto.setFile("");
+        } else {
+            dto.setFile(diplomska.getFilePath().getFilePath());
+        }
 
         return dto;
     }
@@ -99,9 +111,75 @@ public class DiplomskiService {
         dto.setFirstMember(tmp.getFirstMember());
         dto.setSecondMember(tmp.getSecondMember());
         dto.setTitle(tmp.getTitle());
-        // TODO: no time; not date; handling
-        dto.setTime(diplomska.getOdbranaInfo().getDateTime().format(DateTimeFormatter.ofPattern("HH:mm")));
-        dto.setDate(diplomska.getOdbranaInfo().getDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+
+        if (diplomska.getOdbranaInfo().getDateTime() == null) {
+            dto.setTime("");
+            dto.setDate("");
+        } else {
+            dto.setTime(diplomska.getOdbranaInfo().getDateTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+            dto.setDate(diplomska.getOdbranaInfo().getDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        }
+
+        return dto;
+    }
+
+    private DiplomskaFullDTO mapDiplomskaFullDTO(Diplomska diplomska){
+        DiplomskaBasic tmp = mapDiplomskaBasic(diplomska);
+        DiplomskaFullDTO dto = new DiplomskaFullDTO();
+        dto.setStudent(tmp.getStudent());
+        dto.setMentor(tmp.getMentor());
+        dto.setFirstMember(tmp.getFirstMember());
+        dto.setSecondMember(tmp.getSecondMember());
+        dto.setTitle(tmp.getTitle());
+        dto.setDescription(diplomska.getDescription().getDescription());
+        dto.setStatus(Status.descriptionFromNumber(diplomska.getCurrentStatus().getStatus()));
+        dto.setStatusNumber(diplomska.getCurrentStatus().getStatus());
+        dto.setScope(diplomska.getScope().getScope());
+
+        if (diplomska.getSubmissionDate() == null){
+            dto.setDate("");
+        } else {
+            dto.setSubmissionDate(diplomska.getSubmissionDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        }
+
+        if(diplomska.getOdbranaInfo() == null){
+            dto.setDate("");
+            dto.setTime("");
+            dto.setLocation("");
+        } else {
+            if (diplomska.getOdbranaInfo().getDateTime() == null) {
+                dto.setDate("");
+                dto.setTime("");
+            } else {
+                dto.setDate(diplomska.getOdbranaInfo().getDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+                dto.setTime(diplomska.getOdbranaInfo().getDateTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+            }
+            dto.setLocation(diplomska.getOdbranaInfo().getLocation());
+        }
+
+        if (diplomska.getFilePath() == null){
+            dto.setFile("");
+        } else {
+            dto.setFile(diplomska.getFilePath().getFilePath());
+        }
+
+        if (diplomska.getFirstMemberNote() == null){
+            dto.setFirstMemberNote("");
+        } else {
+            dto.setFirstMemberNote(diplomska.getFirstMemberNote().getNote());
+        }
+
+        if (diplomska.getSecondMemberNote() == null){
+            dto.setSecondMemberNote("");
+        } else {
+            dto.setSecondMemberNote(diplomska.getSecondMemberNote().getNote());
+        }
+
+        if (diplomska.getGrade() == null){
+            dto.setGrade("");
+        } else {
+            dto.setGrade(new Grade(diplomska.getGrade().getGrade()).toString());
+        }
 
         return dto;
     }
@@ -129,6 +207,7 @@ public class DiplomskiService {
         Description description = new Description(diplomskaForm.getDescription());
         Diplomska newDiplomska = new Diplomska(mentorId, firstMemberId, secondMemberId, studentId, title, scope, description);
         diplomskiRepository.saveAndFlush(newDiplomska);
+        // TODO: send mail - to student
     }
 
 
@@ -168,141 +247,259 @@ public class DiplomskiService {
         return List.copyOf(users);
     }
 
-    public void populate() {
-        Diplomska diplomska1 = new Diplomska();
-        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
-        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
-        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
-        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173036")));
-        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na rakometni natprevari"));
-        diplomska1.setScope(new Scope("Masinsko ucenje"));
-        diplomska1.setDescription(new Description("Dobar description"));
-        diplomska1.setFilePath(new FilePath("diplomska173036.pdf"));
-        diplomska1.setGrade(new Grade(10));
-        diplomska1.setFirstMemberNote(new Note("Odlicna diplomska"));
-        diplomska1.setSecondMemberNote(new Note("Super"));
-        diplomska1.setSubmissionDate(LocalDate.now());
-        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FINKI"));
-        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
-        diplomskiRepository.saveAndFlush(diplomska1);
-
-        diplomska1 = new Diplomska();
-        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
-        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
-        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
-        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173014")));
-        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na fudbalski natprevari"));
-        diplomska1.setScope(new Scope("Vestacka inteligencija"));
-        diplomska1.setDescription(new Description("Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description"));
-        diplomska1.setFilePath(new FilePath("diplomska173014.pdf"));
-        diplomska1.setGrade(new Grade(10));
-        diplomska1.setFirstMemberNote(new Note("Super"));
-        diplomska1.setSecondMemberNote(new Note("Odlicno"));
-        diplomska1.setSubmissionDate(LocalDate.now());
-        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FEIT"));
-        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
-        diplomskiRepository.saveAndFlush(diplomska1);
-
-        diplomska1 = new Diplomska();
-        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
-        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
-        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
-        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173036")));
-        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na rakometni natprevari"));
-        diplomska1.setScope(new Scope("Masinsko ucenje"));
-        diplomska1.setDescription(new Description("Dobar description"));
-        diplomska1.setFilePath(new FilePath("diplomska173036.pdf"));
-        diplomska1.setGrade(new Grade(10));
-        diplomska1.setFirstMemberNote(new Note("Odlicna diplomska"));
-        diplomska1.setSecondMemberNote(new Note("Super"));
-        diplomska1.setSubmissionDate(LocalDate.now());
-        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FINKI"));
-        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
-        diplomskiRepository.saveAndFlush(diplomska1);
-
-        diplomska1 = new Diplomska();
-        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
-        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
-        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
-        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173014")));
-        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na fudbalski natprevari"));
-        diplomska1.setScope(new Scope("Vestacka inteligencija"));
-        diplomska1.setDescription(new Description("Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description"));
-        diplomska1.setFilePath(new FilePath("diplomska173014.pdf"));
-        diplomska1.setGrade(new Grade(10));
-        diplomska1.setFirstMemberNote(new Note("Super"));
-        diplomska1.setSecondMemberNote(new Note("Odlicno"));
-        diplomska1.setSubmissionDate(LocalDate.now());
-        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FEIT"));
-        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
-        diplomskiRepository.saveAndFlush(diplomska1);
-
-        diplomska1 = new Diplomska();
-        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
-        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
-        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
-        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173036")));
-        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na rakometni natprevari"));
-        diplomska1.setScope(new Scope("Masinsko ucenje"));
-        diplomska1.setDescription(new Description("Dobar description"));
-        diplomska1.setFilePath(new FilePath("diplomska173036.pdf"));
-        diplomska1.setGrade(new Grade(10));
-        diplomska1.setFirstMemberNote(new Note("Odlicna diplomska"));
-        diplomska1.setSecondMemberNote(new Note("Super"));
-        diplomska1.setSubmissionDate(LocalDate.now());
-        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FINKI"));
-        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
-        diplomskiRepository.saveAndFlush(diplomska1);
-
-        diplomska1 = new Diplomska();
-        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
-        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
-        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
-        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173014")));
-        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na fudbalski natprevari"));
-        diplomska1.setScope(new Scope("Vestacka inteligencija"));
-        diplomska1.setDescription(new Description("Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description"));
-        diplomska1.setFilePath(new FilePath("diplomska173014.pdf"));
-        diplomska1.setGrade(new Grade(10));
-        diplomska1.setFirstMemberNote(new Note("Super"));
-        diplomska1.setSecondMemberNote(new Note("Odlicno"));
-        diplomska1.setSubmissionDate(LocalDate.now());
-        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FEIT"));
-        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
-        diplomskiRepository.saveAndFlush(diplomska1);
-
-        diplomska1 = new Diplomska();
-        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
-        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
-        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
-        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173036")));
-        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na rakometni natprevari"));
-        diplomska1.setScope(new Scope("Masinsko ucenje"));
-        diplomska1.setDescription(new Description("Dobar description"));
-        diplomska1.setFilePath(new FilePath("diplomska173036.pdf"));
-        diplomska1.setGrade(new Grade(10));
-        diplomska1.setFirstMemberNote(new Note("Odlicna diplomska"));
-        diplomska1.setSecondMemberNote(new Note("Super"));
-        diplomska1.setSubmissionDate(LocalDate.now());
-        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FINKI"));
-        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
-        diplomskiRepository.saveAndFlush(diplomska1);
-
-        diplomska1 = new Diplomska();
-        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
-        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
-        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
-        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173014")));
-        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na fudbalski natprevari"));
-        diplomska1.setScope(new Scope("Vestacka inteligencija"));
-        diplomska1.setDescription(new Description("Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description"));
-        diplomska1.setFilePath(new FilePath("diplomska173014.pdf"));
-        diplomska1.setGrade(new Grade(10));
-        diplomska1.setFirstMemberNote(new Note("Super"));
-        diplomska1.setSecondMemberNote(new Note("Odlicno"));
-        diplomska1.setSubmissionDate(LocalDate.now());
-        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FEIT"));
-        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
-        diplomskiRepository.saveAndFlush(diplomska1);
+    public DiplomskaFullDTO getDiplomska(UUID diplomskaId){
+        Diplomska diplomska = diplomskiRepository.getOne(new DiplomskaId(diplomskaId));
+        return mapDiplomskaFullDTO(diplomska);
     }
+
+    public DiplomskaFullDTO getDiplomskaForStudent(UUID studentId) {
+        Diplomska diplomska = diplomskiRepository.findDiplomskaByStudentId(new UserId(studentId));
+        return mapDiplomskaFullDTO(diplomska);
+    }
+
+    public void validateCekor2(UUID diplomskaId, UUID studentId) {
+        Diplomska diplomska = diplomskiRepository.getOne(new DiplomskaId(diplomskaId));
+
+        if (!isInRole(new UserId(studentId), RoleName.STUDENT)){
+            throw new RuntimeException("Not authorized");
+            // TODO: exception
+        }
+
+        if(!diplomska.getStudentId().getId().equals(studentId)){
+            throw new RuntimeException("Not valid");
+            // TODO: exception
+        }
+
+        if(diplomska.getCurrentStatus().getStatus()!= 1){
+            throw new RuntimeException("Not valid");
+            // TODO: exception
+        }
+
+        diplomska.updateStatus();
+        diplomskiRepository.saveAndFlush(diplomska);
+        // TODO: send mail - mentor i sluzba
+    }
+
+    public void validateCekor3(UUID diplomskaId, UUID userId){
+        Diplomska diplomska = diplomskiRepository.getOne(new DiplomskaId(diplomskaId));
+
+        if (!isInRole(new UserId(userId), RoleName.ST_SLUZBA)){
+            throw new RuntimeException("Not authorized");
+            // TODO: exception
+        }
+        if(diplomska.getCurrentStatus().getStatus()!= 2){
+            throw new RuntimeException("Not valid");
+            // TODO: exception
+        }
+
+        diplomska.updateStatus();
+        diplomskiRepository.saveAndFlush(diplomska);
+        // TODO: send mail - student, mentor, clenovi
+    }
+
+    public void validateCekor3_1(UUID diplomskaId, UUID userId){
+        Diplomska diplomska = diplomskiRepository.getOne(new DiplomskaId(diplomskaId));
+
+        if (!isInRole(new UserId(userId), RoleName.PRODEKAN)){
+            throw new RuntimeException("Not authorized");
+            // TODO: exception
+        }
+        if(diplomska.getCurrentStatus().getStatus()!= 3){
+            throw new RuntimeException("Not valid");
+            // TODO: exception
+        }
+
+        diplomska.updateStatus();
+        diplomskiRepository.saveAndFlush(diplomska);
+    }
+
+    private List<DiplomskaFullDTO> getAllDiplomskiByStatus(Status status) {
+        return diplomskiRepository.findAllByCurrentStatusEquals(status)
+                .stream()
+                .map(this::mapDiplomskaFullDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<DiplomskaFullDTO> getDiplomskiForValidationBySluzba(UUID userId) {
+        if (!isInRole(new UserId(userId), RoleName.ST_SLUZBA)){
+            throw new RuntimeException("Not authorized");
+            // TODO: exception
+        }
+
+        return getAllDiplomskiByStatus(new Status(LocalDate.now(), 2));
+    }
+
+    public List<DiplomskaFullDTO> getDiplomskiForValidationByProdekan(UUID userId) {
+        if (!isInRole(new UserId(userId), RoleName.PRODEKAN)){
+            throw new RuntimeException("Not authorized");
+            // TODO: exception
+        }
+
+        return getAllDiplomskiByStatus(new Status(LocalDate.now(), 3));
+    }
+
+    public List<DiplomskaFullDTO> getDiplomskiForMentor(UUID mentorId) {
+        return diplomskiRepository.findAllByMentorId(new UserId(mentorId))
+                .stream()
+                .map(this::mapDiplomskaFullDTO)
+                .collect(Collectors.toList());
+    }
+
+    public void uploadFile(UUID diplomskaId, UUID mentorId, String file) {
+        Diplomska diplomska = diplomskiRepository.getOne(new DiplomskaId(diplomskaId));
+
+        if (!diplomska.getMentorId().getId().equals(mentorId)){
+            throw new RuntimeException("Not authorized");
+            // TODO: exception
+        }
+
+        if(diplomska.getCurrentStatus().getStatus()!= 4){
+            throw new RuntimeException("Not valid");
+            // TODO: exception
+        }
+
+        diplomska.updateFilePath(file);
+        diplomska.updateStatus();
+        diplomskiRepository.saveAndFlush(diplomska);
+        // TODO: send mail - student, clenovi
+    }
+
+
+//    public void populate() {
+//        Diplomska diplomska1 = new Diplomska();
+//        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
+//        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
+//        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
+//        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173036")));
+//        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na rakometni natprevari"));
+//        diplomska1.setScope(new Scope("Masinsko ucenje"));
+//        diplomska1.setDescription(new Description("Dobar description"));
+//        diplomska1.setFilePath(new FilePath("diplomska173036.pdf"));
+//        diplomska1.setGrade(new Grade(10));
+//        diplomska1.setFirstMemberNote(new Note("Odlicna diplomska"));
+//        diplomska1.setSecondMemberNote(new Note("Super"));
+//        diplomska1.setSubmissionDate(LocalDate.now());
+//        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FINKI"));
+//        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
+//        diplomskiRepository.saveAndFlush(diplomska1);
+//
+//        diplomska1 = new Diplomska();
+//        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
+//        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
+//        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
+//        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173014")));
+//        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na fudbalski natprevari"));
+//        diplomska1.setScope(new Scope("Vestacka inteligencija"));
+//        diplomska1.setDescription(new Description("Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description"));
+//        diplomska1.setFilePath(new FilePath("diplomska173014.pdf"));
+//        diplomska1.setGrade(new Grade(10));
+//        diplomska1.setFirstMemberNote(new Note("Super"));
+//        diplomska1.setSecondMemberNote(new Note("Odlicno"));
+//        diplomska1.setSubmissionDate(LocalDate.now());
+//        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FEIT"));
+//        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
+//        diplomskiRepository.saveAndFlush(diplomska1);
+//
+//        diplomska1 = new Diplomska();
+//        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
+//        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
+//        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
+//        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173036")));
+//        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na rakometni natprevari"));
+//        diplomska1.setScope(new Scope("Masinsko ucenje"));
+//        diplomska1.setDescription(new Description("Dobar description"));
+//        diplomska1.setFilePath(new FilePath("diplomska173036.pdf"));
+//        diplomska1.setGrade(new Grade(10));
+//        diplomska1.setFirstMemberNote(new Note("Odlicna diplomska"));
+//        diplomska1.setSecondMemberNote(new Note("Super"));
+//        diplomska1.setSubmissionDate(LocalDate.now());
+//        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FINKI"));
+//        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
+//        diplomskiRepository.saveAndFlush(diplomska1);
+//
+//        diplomska1 = new Diplomska();
+//        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
+//        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
+//        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
+//        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173014")));
+//        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na fudbalski natprevari"));
+//        diplomska1.setScope(new Scope("Vestacka inteligencija"));
+//        diplomska1.setDescription(new Description("Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description"));
+//        diplomska1.setFilePath(new FilePath("diplomska173014.pdf"));
+//        diplomska1.setGrade(new Grade(10));
+//        diplomska1.setFirstMemberNote(new Note("Super"));
+//        diplomska1.setSecondMemberNote(new Note("Odlicno"));
+//        diplomska1.setSubmissionDate(LocalDate.now());
+//        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FEIT"));
+//        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
+//        diplomskiRepository.saveAndFlush(diplomska1);
+//
+//        diplomska1 = new Diplomska();
+//        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
+//        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
+//        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
+//        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173036")));
+//        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na rakometni natprevari"));
+//        diplomska1.setScope(new Scope("Masinsko ucenje"));
+//        diplomska1.setDescription(new Description("Dobar description"));
+//        diplomska1.setFilePath(new FilePath("diplomska173036.pdf"));
+//        diplomska1.setGrade(new Grade(10));
+//        diplomska1.setFirstMemberNote(new Note("Odlicna diplomska"));
+//        diplomska1.setSecondMemberNote(new Note("Super"));
+//        diplomska1.setSubmissionDate(LocalDate.now());
+//        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FINKI"));
+//        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
+//        diplomskiRepository.saveAndFlush(diplomska1);
+//
+//        diplomska1 = new Diplomska();
+//        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
+//        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
+//        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
+//        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173014")));
+//        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na fudbalski natprevari"));
+//        diplomska1.setScope(new Scope("Vestacka inteligencija"));
+//        diplomska1.setDescription(new Description("Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description"));
+//        diplomska1.setFilePath(new FilePath("diplomska173014.pdf"));
+//        diplomska1.setGrade(new Grade(10));
+//        diplomska1.setFirstMemberNote(new Note("Super"));
+//        diplomska1.setSecondMemberNote(new Note("Odlicno"));
+//        diplomska1.setSubmissionDate(LocalDate.now());
+//        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FEIT"));
+//        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
+//        diplomskiRepository.saveAndFlush(diplomska1);
+//
+//        diplomska1 = new Diplomska();
+//        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
+//        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
+//        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
+//        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173036")));
+//        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na rakometni natprevari"));
+//        diplomska1.setScope(new Scope("Masinsko ucenje"));
+//        diplomska1.setDescription(new Description("Dobar description"));
+//        diplomska1.setFilePath(new FilePath("diplomska173036.pdf"));
+//        diplomska1.setGrade(new Grade(10));
+//        diplomska1.setFirstMemberNote(new Note("Odlicna diplomska"));
+//        diplomska1.setSecondMemberNote(new Note("Super"));
+//        diplomska1.setSubmissionDate(LocalDate.now());
+//        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FINKI"));
+//        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
+//        diplomskiRepository.saveAndFlush(diplomska1);
+//
+//        diplomska1 = new Diplomska();
+//        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
+//        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
+//        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
+//        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173014")));
+//        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na fudbalski natprevari"));
+//        diplomska1.setScope(new Scope("Vestacka inteligencija"));
+//        diplomska1.setDescription(new Description("Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description Dolg description"));
+//        diplomska1.setFilePath(new FilePath("diplomska173014.pdf"));
+//        diplomska1.setGrade(new Grade(10));
+//        diplomska1.setFirstMemberNote(new Note("Super"));
+//        diplomska1.setSecondMemberNote(new Note("Odlicno"));
+//        diplomska1.setSubmissionDate(LocalDate.now());
+//        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FEIT"));
+//        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
+//        diplomskiRepository.saveAndFlush(diplomska1);
+//    }
 }

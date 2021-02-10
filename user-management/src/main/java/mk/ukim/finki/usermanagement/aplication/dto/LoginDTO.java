@@ -17,4 +17,7 @@ public class LoginDTO {
     @NotNull
     private RoleName roleName;
 
+    @NotNull
+    private String username;
+
 }

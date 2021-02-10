@@ -29,7 +29,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginDTO> login(@NotNull @RequestBody LoginForm loginForm){
         User user = authenticationService.login(loginForm);
-        return ResponseEntity.ok(new LoginDTO(user.id().getId(), user.getRole().getRoleName()));
+        LoginDTO login = new LoginDTO(user.id().getId(), user.getRole().getRoleName(), user.getUsername().getUsername());
+        return ResponseEntity.ok(login);
     }
 
 //    @GetMapping("/populate")

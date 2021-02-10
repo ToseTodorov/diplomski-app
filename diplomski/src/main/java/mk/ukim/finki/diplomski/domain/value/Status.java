@@ -55,13 +55,15 @@ public class Status implements ValueObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Status status1 = (Status) o;
-        return status == status1.status &&
-                Objects.equals(startDate, status1.startDate) &&
-                Objects.equals(statusDescription, status1.statusDescription);
+        return status == status1.status;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(startDate, status, statusDescription);
+    }
+
+    public static String descriptionFromNumber(int status){
+        return statusMap.getOrDefault(status, "");
     }
 }
