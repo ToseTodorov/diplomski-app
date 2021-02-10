@@ -4,6 +4,7 @@ import mk.ukim.finki.diplomski.aplication.dto.DiplomskaDTO;
 import mk.ukim.finki.diplomski.aplication.dto.DiplomskaFullDTO;
 import mk.ukim.finki.diplomski.aplication.dto.DiplomskaPublicDTO;
 import mk.ukim.finki.diplomski.aplication.form.DiplomskaForm;
+import mk.ukim.finki.diplomski.aplication.form.OdbranaForm;
 import mk.ukim.finki.diplomski.domain.model.Diplomska;
 import mk.ukim.finki.diplomski.domain.repository.DiplomskiRepository;
 import mk.ukim.finki.diplomski.domain.value.*;
@@ -126,6 +127,7 @@ public class DiplomskiService {
     private DiplomskaFullDTO mapDiplomskaFullDTO(Diplomska diplomska){
         DiplomskaBasic tmp = mapDiplomskaBasic(diplomska);
         DiplomskaFullDTO dto = new DiplomskaFullDTO();
+        dto.setId(diplomska.id().getId().toString());
         dto.setStudent(tmp.getStudent());
         dto.setMentor(tmp.getMentor());
         dto.setFirstMember(tmp.getFirstMember());
@@ -311,6 +313,40 @@ public class DiplomskiService {
 
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
+    }
+
+    public void validateCekor6(UUID diplomskaId, UUID userId){
+        Diplomska diplomska = diplomskiRepository.getOne(new DiplomskaId(diplomskaId));
+
+        if (!isInRole(new UserId(userId), RoleName.ST_SLUZBA)){
+            throw new RuntimeException("Not authorized");
+            // TODO: exception
+        }
+        if(diplomska.getCurrentStatus().getStatus()!= 6){
+            throw new RuntimeException("Not valid");
+            // TODO: exception
+        }
+
+        diplomska.updateStatus();
+        diplomskiRepository.saveAndFlush(diplomska);
+        // TODO: send mail - student, mentor, clenovi
+    }
+
+    public void updateOdbranaInfo(OdbranaForm odbranaForm, UUID mentorId){
+        UUID diplomskaId = UUID.fromString(odbranaForm.getDiplomskaId());
+        Diplomska diplomska = diplomskiRepository.getOne(new DiplomskaId(diplomskaId));
+        if (!diplomska.getMentorId().getId().equals(mentorId)) {
+            throw new RuntimeException("Not authorized");
+            // TODO: exception
+        }
+
+        String dateTime = odbranaForm.getDate() + "-" + odbranaForm.getTime();
+        diplomska.updateOdbranaInfo(
+                LocalDateTime.parse(dateTime,DateTimeFormatter.ofPattern("dd.MM.yyyy-HH:mm")),
+                odbranaForm.getLocation());
+        diplomska.updateStatus();
+        diplomskiRepository.saveAndFlush(diplomska);
+        // TODO: send mail - to student
     }
 
     private List<DiplomskaFullDTO> getAllDiplomskiByStatus(Status status) {

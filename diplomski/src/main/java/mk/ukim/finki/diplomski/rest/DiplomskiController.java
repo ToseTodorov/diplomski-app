@@ -5,6 +5,7 @@ import mk.ukim.finki.diplomski.aplication.dto.DiplomskaDTO;
 import mk.ukim.finki.diplomski.aplication.dto.DiplomskaFullDTO;
 import mk.ukim.finki.diplomski.aplication.dto.DiplomskaPublicDTO;
 import mk.ukim.finki.diplomski.aplication.form.DiplomskaForm;
+import mk.ukim.finki.diplomski.aplication.form.OdbranaForm;
 import mk.ukim.finki.sharedkernel.domain.dto.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -139,6 +140,26 @@ public class DiplomskiController {
         String userId = request.getHeader("user");
         return ResponseEntity.ok(diplomskiService.getDiplomskiForValidationBySluzbaOdbrana(UUID.fromString(userId)));
     }
+
+    @PostMapping("/validate-cekor6")
+    public ResponseEntity validateCekor6(@RequestParam String diplomskaId,
+                                         HttpServletRequest request) {
+        String userId = request.getHeader("user");
+        diplomskiService.validateCekor6(UUID.fromString(diplomskaId), UUID.fromString(userId));
+        return ResponseEntity.ok().build();
+    }
+
+
+    @PostMapping("/submit-odbrana")
+    public ResponseEntity submitOdbranaInfo(@NotNull @RequestBody OdbranaForm odbranaForm,
+                                            HttpServletRequest request) {
+        String userId = request.getHeader("user");
+        diplomskiService.updateOdbranaInfo(odbranaForm, UUID.fromString(userId));
+        return ResponseEntity.ok().build();
+    }
+
+
+
 
 
 

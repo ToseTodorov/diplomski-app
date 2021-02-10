@@ -13,6 +13,9 @@ import java.io.Serializable;
 public class DiplomskaFullDTO implements Serializable {
 
     @NotNull
+    private String id;
+
+    @NotNull
     private String title;
 
     @NotNull
