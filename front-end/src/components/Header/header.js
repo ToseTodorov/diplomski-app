@@ -87,7 +87,7 @@ const Header = (props) => {
             menu.push(
                 <li className="nav-item">
                     <Link to={"#"} className="nav-link">
-                        <i className="fa fa-user"/>&nbsp;{props.getCurrentUser().roleName} {/* TODO: SET USERNAME*/}
+                        <i className="fa fa-user"/>&nbsp;{props.getCurrentUser().username} {/* TODO: SET USERNAME*/}
                     </Link>
                 </li>
             );

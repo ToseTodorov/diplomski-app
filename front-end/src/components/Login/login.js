@@ -17,11 +17,7 @@ const Login = (props) => {
 
         Auth.login(request)
             .then((response) => {
-                const user = {
-                    userId: response.data.userId,
-                    roleName: response.data.roleName
-                };
-                props.login(user);
+                props.login(response.data);
             });
     };
 

@@ -49,6 +49,7 @@ function user() {
     }
     return {
         userId: '',
-        roleName: ''
+        roleName: '',
+        username: ''
     };
 }
