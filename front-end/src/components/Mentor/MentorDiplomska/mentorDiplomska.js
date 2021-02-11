@@ -46,6 +46,51 @@ const MentorDiplomska = (props) => {
         );
     };
 
+    const validate = (e) => {
+        e.preventDefault();
+
+        diplomskiService.validateDiplomska(currentDiplomska.id).then((reps) => {
+            alert("Validated!")
+            props.rerenderParent();
+        });
+    };
+
+    const validateHtml = () => {
+        if(currentDiplomska.statusNumber === 5){
+            return (
+                <tr>
+                    <td style={{width: "30%"}}>
+                        <span className="fa fa-clipboard"/>&nbsp;
+                        Валидирај
+                    </td>
+                    <td>
+                        <i
+                            className="fa fa-check-square"
+                            style={{color: "green", fontSize: "x-large", cursor: "pointer"}}
+                            onClick={validate}
+                        />
+                    </td>
+                </tr>
+            );
+        }
+        else if(currentDiplomska.statusNumber > 5){
+            return (
+                <tr>
+                    <td style={{width: "30%"}}>
+                        <span className="fa fa-clipboard"/>&nbsp;
+                        Валидирај
+                    </td>
+                    <td>
+                        <strong>Валидирано</strong>
+                    </td>
+                </tr>
+            );
+        }
+        return null;
+    };
+
+
+
     return (
         <div className="panel panel-default">
             <div className="panel-heading">
@@ -128,6 +173,7 @@ const MentorDiplomska = (props) => {
                             </strong>
                         </td>
                     </tr>
+                    {validateHtml()}
                     </tbody>
                 </table>
             </div>

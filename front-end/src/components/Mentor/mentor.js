@@ -2,6 +2,7 @@ import React, {Component, useEffect, useState} from 'react';
 import diplomskiService from "./../../service/diplomskiService"
 import './../Dimplomski/diplomski.css'
 import MentorDiplomska from "./MentorDiplomska/mentorDiplomska";
+import {withRouter} from "react-router";
 
 class Mentor extends Component {
     constructor(props) {
@@ -19,12 +20,14 @@ class Mentor extends Component {
     }
 
     rerenderParent = () => {
-        this.forceUpdate();
+        diplomskiService.getMentorDiplomaList().then((resp) => {
+            this.setState({diplomski: resp.data});
+        });
     }
 
     render() {
         let diplomskiHtml = this.state.diplomski.map((dip) => {
-            return <MentorDiplomska data={dip} key={dip.id} rerenderParent={this.rerenderParent}/>
+            return <MentorDiplomska data={dip} key={dip.id} rerenderParent={this.rerenderParent} {...this.props}/>
         });
 
         return (
@@ -37,4 +40,4 @@ class Mentor extends Component {
     }
 }
 
-export default Mentor;
+export default withRouter(Mentor);

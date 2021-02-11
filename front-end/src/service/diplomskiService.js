@@ -13,6 +13,9 @@ const diplomskiService = {
     uploadFile: (diplomskaId, file) => {
         return diplomskiApiUtils.postFile(`/api/diplomski/upload-file?diplomskaId=${diplomskaId}`, file);
     },
+    validateDiplomska: (diplomskaId) => {
+        return diplomskiApiUtils.post(`/api/diplomski/validate-cekor5?diplomskaId=${diplomskaId}`, {});
+    },
     getDummyDiplomski: () => {
         return [
             {
