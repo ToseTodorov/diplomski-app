@@ -174,6 +174,11 @@ public class DiplomskiController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/mail")
+    public void mail(){
+        diplomskiService.sendMail("daa2982a-90b6-43f0-b898-681047aa985a", "By Id", "test");
+    }
+
     @GetMapping("/populate")
     public ResponseEntity populate(){
         try {

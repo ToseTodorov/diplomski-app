@@ -10,7 +10,6 @@ import mk.ukim.finki.diplomski.domain.repository.DiplomskiRepository;
 import mk.ukim.finki.diplomski.domain.value.*;
 import mk.ukim.finki.sharedkernel.domain.dto.UserDTO;
 import mk.ukim.finki.sharedkernel.domain.role.RoleName;
-import mk.ukim.finki.sharedkernel.domain.user.Username;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -39,12 +35,14 @@ public class DiplomskiService {
     private final DiplomskiRepository diplomskiRepository;
     private final UserService userService;
     private final RoleService roleService;
+    private final EmailService emailService;
     private final String publicFolderPath;
 
-    public DiplomskiService(DiplomskiRepository diplomskiRepository, UserService userService, RoleService roleService, @Value("${public.folder.path}") String folderPath) {
+    public DiplomskiService(DiplomskiRepository diplomskiRepository, UserService userService, RoleService roleService, EmailService emailService, @Value("${public.folder.path}") String folderPath) {
         this.diplomskiRepository = diplomskiRepository;
         this.userService = userService;
         this.roleService = roleService;
+        this.emailService = emailService;
         this.publicFolderPath = folderPath;
     }
 
@@ -221,7 +219,9 @@ public class DiplomskiService {
         Description description = new Description(diplomskaForm.getDescription());
         Diplomska newDiplomska = new Diplomska(mentorId, firstMemberId, secondMemberId, studentId, title, scope, description);
         diplomskiRepository.saveAndFlush(newDiplomska);
-        // TODO: send mail - to student
+
+
+        sendMail(studentId.getId().toString(),"Kreirana diplomska", " Uspesno e dodadena vasata diplomska");
     }
 
 
@@ -291,7 +291,9 @@ public class DiplomskiService {
 
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
-        // TODO: send mail - mentor i sluzba
+
+        //sendMail(diplomska.getMentorId().getId().toString(), "Cekor2", "tekst");
+        sendMail(diplomska.getStudentId().getId().toString(), "Cekor2", "tekst");
     }
 
     public void validateCekor3(UUID diplomskaId, UUID userId){
@@ -309,6 +311,7 @@ public class DiplomskiService {
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
         // TODO: send mail - student, mentor, clenovi
+        sendMail(diplomska.getStudentId().getId().toString(), "Cekor3", "tekst");
     }
 
     public void validateCekor3_1(UUID diplomskaId, UUID userId){
@@ -341,7 +344,7 @@ public class DiplomskiService {
 
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
-        // TODO: send mail - student, mentor, clenovi
+        sendMail(diplomska.getStudentId().getId().toString(), "Cekor5", "tekst");
     }
 
     public void uploadNote(UUID diplomskaId, String note, UUID userId) {
@@ -378,7 +381,8 @@ public class DiplomskiService {
 
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
-        // TODO: send mail - student, mentor, clenovi
+
+        sendMail(diplomska.getStudentId().getId().toString(), "Cekor6", "tekst");
     }
 
     public void updateOdbranaInfo(OdbranaForm odbranaForm, UUID mentorId){
@@ -391,11 +395,12 @@ public class DiplomskiService {
 
         String dateTime = odbranaForm.getDate() + "-" + odbranaForm.getTime();
         diplomska.updateOdbranaInfo(
-                LocalDateTime.parse(dateTime,DateTimeFormatter.ofPattern("dd.MM.yyyy-HH:mm")),
+                LocalDateTime.parse(dateTime,DateTimeFormatter.ofPattern("d.M.yyyy-HH:mm")),
                 odbranaForm.getLocation());
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
-        // TODO: send mail - to student
+
+        sendMail(diplomska.getStudentId().getId().toString(), "Cekor7", "tekst");
     }
 
     private List<DiplomskaFullDTO> getAllDiplomskiByStatus(Status status) {
@@ -472,7 +477,8 @@ public class DiplomskiService {
         diplomska.updateFilePath(indeks + ".pdf");
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
-        // TODO: send mail - student, clenovi
+
+        sendMail(diplomska.getStudentId().getId().toString(), "Cekor4", "tekst");
     }
 
     public List<DiplomskaFullDTO> getDiplomskiForKomisija(UUID userId) {
@@ -485,6 +491,9 @@ public class DiplomskiService {
                 .collect(Collectors.toList());
     }
 
+    public void sendMail(String to, String subject, String text) {
+        emailService.sendMail(to,subject, text);
+    }
 
     public void populate() {
         diplomskiRepository.deleteAll();
