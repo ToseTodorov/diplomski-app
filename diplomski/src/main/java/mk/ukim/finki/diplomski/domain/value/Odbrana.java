@@ -24,10 +24,10 @@ public class Odbrana implements ValueObject {
     }
 
     public Odbrana(LocalDateTime dateTime, String location) {
-        if (dateTime.isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("Date should not be in the past");
-            // TODO: exception
-        }
+//        if (dateTime.isBefore(LocalDateTime.now())) {
+//            throw new RuntimeException("Date should not be in the past");
+//            // TODO: exception
+//        }
 
         this.dateTime = dateTime;
         this.location = location;

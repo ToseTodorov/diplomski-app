@@ -201,7 +201,7 @@ const MentorDiplomska = (props) => {
                             Датум на пријавување
                         </td>
                         <td>
-                            <strong>{currentDiplomska.date}</strong>
+                            <strong>{currentDiplomska.submissionDate}</strong>
                         </td>
                     </tr>
                     <tr>
