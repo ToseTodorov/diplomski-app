@@ -125,13 +125,14 @@ public class UserServiceClient implements UserService {
             // /api/users/role/{roleId}/ids
             return Objects.requireNonNull(
                     restTemplate.exchange(
-                            uri().path(String.format("/api/users/role/%s/ids", roleId.toString())).build().toUri(),
+                            uri().path(String.format("/api/users/role/%s", roleId.toString())).build().toUri(),
                             HttpMethod.GET,
                             null,
                             new ParameterizedTypeReference<List<UserDTO>>() {}
                     ).getBody()
             );
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.err.printf("Error retrieving users by id; %s\n", ex);
             return null;
         }

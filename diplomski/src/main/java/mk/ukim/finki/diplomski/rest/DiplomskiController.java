@@ -51,6 +51,7 @@ public class DiplomskiController {
             diplomskiService.submitNewDiplomska(diplomskaForm, userId);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Try again", e);
         }
     }
@@ -60,7 +61,7 @@ public class DiplomskiController {
         return ResponseEntity.ok(diplomskiService.getAllProfessors());
     }
 
-    @GetMapping("/teachingstaff")
+    @GetMapping("/teaching-staff")
     public ResponseEntity<List<UserDTO>> getAllProfessorsAndAssistants(){
         return ResponseEntity.ok(diplomskiService.getAllTeachingStaff());
     }

@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<LoginDTO> login(@NotNull @RequestBody LoginForm loginForm){
         User user = authenticationService.login(loginForm);
-        LoginDTO login = new LoginDTO(user.id().getId(), user.getRole().getRoleName(), user.getUsername().getUsername());
+        LoginDTO login = new LoginDTO(user.id().getId(), user.getRole().getRoleName(), user.getUsername().getUsername(), user.getFullName().toString());
         return ResponseEntity.ok(login);
     }
 

@@ -77,9 +77,9 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/api/users/role/%s/")
-    public List<UserDTO> findUsersByRole(@PathVariable("roleId") UUID roleId){
-        List<User> usersWithRole = userRepository.findAllByRole_Id(new RoleId(roleId));
+    @GetMapping("/role/{roleId}")
+    public List<UserDTO> findUsersByRole(@PathVariable("roleId") String roleId){
+        List<User> usersWithRole = userRepository.findAllByRole_Id(new RoleId(UUID.fromString(roleId)));
         return usersWithRole.stream()
                 .map(user -> new UserDTO(user.id().getId(), user.getUsername().getUsername(), user.getFullName().toString()))
                 .collect(Collectors.toList());

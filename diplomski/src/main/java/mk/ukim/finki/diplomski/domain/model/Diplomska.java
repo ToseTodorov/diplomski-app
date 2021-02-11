@@ -70,6 +70,7 @@ public class Diplomska extends AbstractEntity<DiplomskaId> {
 
     public Diplomska(UserId mentorId, UserId firstMemberId, UserId secondMemberId, UserId studentId,
                      Title title, Scope scope, Description description) {
+        super(new DiplomskaId());
         this.mentorId = mentorId;
         this.firstMemberId = firstMemberId;
         this.secondMemberId = secondMemberId;

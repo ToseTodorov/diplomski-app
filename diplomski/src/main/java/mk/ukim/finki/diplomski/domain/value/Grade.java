@@ -36,7 +36,7 @@ public class Grade implements ValueObject {
 
 
     public Grade(){
-        this.grade = -1;
+        this.grade = 10;
         gradeDescription = "";
     }
 

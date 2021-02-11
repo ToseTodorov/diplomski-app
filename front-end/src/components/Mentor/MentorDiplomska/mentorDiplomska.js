@@ -109,6 +109,7 @@ const MentorDiplomska = (props) => {
             location: locationPicked
         };
         diplomskiService.submitOdbrana(odbrana).then((resp) => {
+            alert("Submitted!");
             props.rerenderParent();
         });
     }

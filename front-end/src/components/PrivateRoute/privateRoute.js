@@ -18,6 +18,6 @@ export const PrivateRoute = ({ component: Component, roles, getCurrentUser, ...r
 
         // authorised so return component;
         console.log("IT'S OKAT, GO IN")
-        return <Component {...props} {...rest} />
+        return <Component getCurrentUser={getCurrentUser} {...props} {...rest} />
     }} />
 )

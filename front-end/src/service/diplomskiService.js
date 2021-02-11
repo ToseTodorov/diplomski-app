@@ -19,6 +19,15 @@ const diplomskiService = {
     submitOdbrana: (obdrana) => {
         return diplomskiApiUtils.post(`/api/diplomski/submit-odbrana`, obdrana);
     },
+    getProfessors: () => {
+        return diplomskiApiUtils.get("/api/diplomski/professors");
+    },
+    getTeachingStaff: () => {
+        return diplomskiApiUtils.get("/api/diplomski/teaching-staff");
+    },
+    createDiplomska: (req) => {
+        return diplomskiApiUtils.post("/api/diplomski/submit", req);
+    },
     getDummyDiplomski: () => {
         return [
             {
