@@ -10,6 +10,7 @@ import mk.ukim.finki.diplomski.domain.repository.DiplomskiRepository;
 import mk.ukim.finki.diplomski.domain.value.*;
 import mk.ukim.finki.sharedkernel.domain.dto.UserDTO;
 import mk.ukim.finki.sharedkernel.domain.role.RoleName;
+import mk.ukim.finki.sharedkernel.domain.user.Username;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -409,7 +410,9 @@ public class DiplomskiService {
             // TODO: exception
         }
 
-        Path filePath = Paths.get("../public", file.getOriginalFilename());
+        Username indeks = userService.findUsernameByUserId(diplomska.getStudentId().getId());
+
+        Path filePath = Paths.get("../public/", indeks.getUsername() + ".pdf");
         try (OutputStream os = Files.newOutputStream(filePath)){
             os.write(file.getBytes());
         } catch (IOException e) {
