@@ -177,7 +177,13 @@ public class DiplomskiController {
 
     @GetMapping("/mail")
     public void mail(){
-        diplomskiService.sendMail("daa2982a-90b6-43f0-b898-681047aa985a", "By Id", "test");
+        //diplomskiService.sendMail("daa2982a-90b6-43f0-b898-681047aa985a", "By Id", "test");
+        //diplomskiService.generateWordDocument2();
+    }
+
+    @GetMapping("/generate-doc")
+    public void generateDoc(){
+        diplomskiService.generateWordDocument2();
     }
 
     @GetMapping("/populate")

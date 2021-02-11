@@ -49,9 +49,9 @@ public class AuthenticationService {
         FullName fullName = new FullName(userForm.getFirstName(), userForm.getLastName());
         Username username = new Username(userForm.getUsername());
         Email email = new Email(userForm.getEmail());
-        if(!EncodedPassword.validatePassword(userForm.getPassword())){
-            throw new PasswordException("Invalid password");
-        }
+//        if(!EncodedPassword.validatePassword(userForm.getPassword())){
+//            throw new PasswordException("Invalid password");
+//        }
         EncodedPassword password = new EncodedPassword(passwordEncoder.encode(userForm.getPassword()));
         Role role = roleRepository.findById(new RoleId(userForm.getRoleId())).orElseThrow(RoleNotFoundException::new);
         User user = User.signUp(fullName, username, email, password, role);

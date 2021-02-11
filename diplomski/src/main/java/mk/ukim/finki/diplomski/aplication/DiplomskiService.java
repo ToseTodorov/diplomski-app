@@ -10,6 +10,12 @@ import mk.ukim.finki.diplomski.domain.repository.DiplomskiRepository;
 import mk.ukim.finki.diplomski.domain.value.*;
 import mk.ukim.finki.sharedkernel.domain.dto.UserDTO;
 import mk.ukim.finki.sharedkernel.domain.role.RoleName;
+import org.docx4j.jaxb.Context;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.exceptions.InvalidFormatException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.docx4j.wml.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -400,6 +406,7 @@ public class DiplomskiService {
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
 
+        generateWordDocument(diplomska);
         sendMail(diplomska.getStudentId().getId().toString(), "Cekor7", "tekst");
     }
 
@@ -493,6 +500,67 @@ public class DiplomskiService {
 
     public void sendMail(String to, String subject, String text) {
         emailService.sendMail(to,subject, text);
+    }
+
+    public void generateWordDocument(Diplomska diplomska){
+        ObjectFactory factory = Context.getWmlObjectFactory();
+        P p = factory.createP();
+        R r = factory.createR();
+        Text t = factory.createText();
+        t.setValue("Записник за дипломска:");
+        r.getContent().add(t);
+        p.getContent().add(r);
+        RPr rpr = factory.createRPr();
+        BooleanDefaultTrue b = new BooleanDefaultTrue();
+        rpr.setB(b);
+        rpr.setI(b);
+        rpr.setCaps(b);
+        //Color green = factory.createColor();
+        //green.setVal("green");
+        //rpr.setColor(green);
+        r.setRPr(rpr);
+        WordprocessingMLPackage wordPackage = null;
+        try {
+            wordPackage = WordprocessingMLPackage.createPackage();
+        } catch (InvalidFormatException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+        String student = mapStudent(diplomska.getStudentId().getId());
+        MainDocumentPart mainDocumentPart = wordPackage.getMainDocumentPart();
+        mainDocumentPart.addStyledParagraphOfText("Title", "ЗАПИСНИК");
+        mainDocumentPart.getContent().add(p);
+        mainDocumentPart.addStyledParagraphOfText("p", "Студент: " + student);
+        mainDocumentPart.addStyledParagraphOfText("p", "Датум на одбрана: " + diplomska.getOdbranaInfo().getDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+        mainDocumentPart.addStyledParagraphOfText("p", "Локација: " + diplomska.getOdbranaInfo().getLocation());
+        mainDocumentPart.addStyledParagraphOfText("p", "Тема: " + diplomska.getTitle().getTitle());
+        mainDocumentPart.addStyledParagraphOfText("p", "Област: " + diplomska.getScope().getScope());
+        File exportFile = new File(publicFolderPath + (student.split(" -")[0]) + ".docx");
+        try {
+            wordPackage.save(exportFile);
+        } catch (Docx4JException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public void generateWordDocument2(){
+        Diplomska diplomska1 = new Diplomska();
+        diplomska1.setMentorId(new UserId(userService.findUserIdByUsername("venko.stojanov")));
+        diplomska1.setFirstMemberId(new UserId(userService.findUserIdByUsername("toshe.todorov")));
+        diplomska1.setSecondMemberId(new UserId(userService.findUserIdByUsername("dragan.petkov")));
+        diplomska1.setStudentId(new UserId(userService.findUserIdByUsername("173036")));
+        diplomska1.setTitle(new Title("Primena na MU i VI vo analiza na rakometni natprevari"));
+        diplomska1.setScope(new Scope("Masinsko ucenje"));
+        diplomska1.setDescription(new Description("Dobar description"));
+        diplomska1.setFilePath(new FilePath(""));
+        diplomska1.setGrade(new Grade(10));
+        diplomska1.setFirstMemberNote(new Note("Odlicna diplomska"));
+        diplomska1.setSecondMemberNote(new Note("Super"));
+        diplomska1.setSubmissionDate(LocalDate.now());
+        diplomska1.setOdbranaInfo(new Odbrana(LocalDateTime.now(), "Amfiteatar na FINKI"));
+        diplomska1.setCurrentStatus(new Status(LocalDate.now(), 7));
+        generateWordDocument(diplomska1);
     }
 
     public void populate() {

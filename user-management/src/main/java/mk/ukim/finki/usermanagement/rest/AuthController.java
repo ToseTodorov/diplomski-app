@@ -37,128 +37,184 @@ public class AuthController {
     public ResponseEntity<String> populateDatabase(){
 
         UserForm user1 = new UserForm();
-        user1.setFirstName("Петко");
-        user1.setLastName("Петков");
-        user1.setUsername("171999");
-        user1.setEmail("petko.petkov@mail.com");
+        user1.setFirstName("Атанас");
+        user1.setLastName("Атанасов");
+        user1.setUsername("171994");
+        user1.setEmail("atanas.atanasov@mail.com");
         user1.setPassword("Password123!");
         Role role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
         user1.setRoleId(role.id().getId());
         this.authenticationService.register(user1);
 
-        UserForm user2 = new UserForm();
-        user2.setFirstName("Трајко");
-        user2.setLastName("Трајков");
-        user2.setUsername("171998");
-        user2.setEmail("trajko.trajkov@mail.com");
-        user2.setPassword("Password123!");
-        role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
-        user2.setRoleId(role.id().getId());
-        this.authenticationService.register(user2);
-
-        UserForm user3 = new UserForm();
-        user3.setFirstName("Аце");
-        user3.setLastName("Ацев");
-        user3.setUsername("171997");
-        user3.setEmail("ace.acev@mail.com");
-        user3.setPassword("Password123!");
-        role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
-        user3.setRoleId(role.id().getId());
-        this.authenticationService.register(user3);
-
         user1 = new UserForm();
-        user1.setFirstName("Алберт");
-        user1.setLastName("Ајнштајн");
-        user1.setUsername("171996");
-        user1.setEmail("albert.einstein@mail.com");
+        user1.setFirstName("Ангел");
+        user1.setLastName("Ангелов");
+        user1.setUsername("171993");
+        user1.setEmail("angel.angelov@mail.com");
         user1.setPassword("Password123!");
         role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
         user1.setRoleId(role.id().getId());
         this.authenticationService.register(user1);
 
         user1 = new UserForm();
-        user1.setFirstName("Исак");
-        user1.setLastName("Њутн");
-        user1.setUsername("171995");
-        user1.setEmail("isaac.newton@mail.com");
+        user1.setFirstName("Пеце");
+        user1.setLastName("Пецев");
+        user1.setUsername("171992");
+        user1.setEmail("pece.pecev@mail.com");
         user1.setPassword("Password123!");
         role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
         user1.setRoleId(role.id().getId());
         this.authenticationService.register(user1);
 
         user1 = new UserForm();
-        user1.setFirstName("Васе");
-        user1.setLastName("Васев");
-        user1.setUsername("vase.vasev");
-        user1.setEmail("vase.vasev@mail.com");
+        user1.setFirstName("Валентин");
+        user1.setLastName("Валентинов");
+        user1.setUsername("171991");
+        user1.setEmail("valentin.valentinov@mail.com");
         user1.setPassword("Password123!");
-        role = this.roleRepository.findRoleByRoleName(RoleName.PRODEKAN);
+        role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
         user1.setRoleId(role.id().getId());
         this.authenticationService.register(user1);
 
         user1 = new UserForm();
-        user1.setFirstName("Carl");
-        user1.setLastName("Sagan");
-        user1.setUsername("carl.sagan");
-        user1.setEmail("carl.sagan@mail.com");
+        user1.setFirstName("Стефан");
+        user1.setLastName("Стефанов");
+        user1.setUsername("171990");
+        user1.setEmail("stefan.stefanov@mail.com");
         user1.setPassword("Password123!");
-        role = this.roleRepository.findRoleByRoleName(RoleName.PROFESSOR);
-        user1.setRoleId(role.id().getId());
-        this.authenticationService.register(user1);
-
-
-        user1 = new UserForm();
-        user1.setFirstName("Stanley");
-        user1.setLastName("Kubrick");
-        user1.setUsername("stanley.kubrick");
-        user1.setEmail("stanley.kubrick@mail.com");
-        user1.setPassword("Password123!");
-        role = this.roleRepository.findRoleByRoleName(RoleName.PROFESSOR);
-        user1.setRoleId(role.id().getId());
-        this.authenticationService.register(user1);
-
-        user1 = new UserForm();
-        user1.setFirstName("Heywood");
-        user1.setLastName("Floyd");
-        user1.setUsername("heywood.floyd");
-        user1.setEmail("heywood.floyd@mail.com");
-        user1.setPassword("Password123!");
-        role = this.roleRepository.findRoleByRoleName(RoleName.PROFESSOR);
-        user1.setRoleId(role.id().getId());
-        this.authenticationService.register(user1);
-
-        user1 = new UserForm();
-        user1.setFirstName("David");
-        user1.setLastName("Bowman");
-        user1.setUsername("david.bowman");
-        user1.setEmail("david.bowman@mail.com");
-        user1.setPassword("Password123!");
-        role = this.roleRepository.findRoleByRoleName(RoleName.ASSISTANT);
-        user1.setRoleId(role.id().getId());
-        this.authenticationService.register(user1);
-
-        user1 = new UserForm();
-        user1.setFirstName("Гоце");
-        user1.setLastName("Гоцев");
-        user1.setUsername("goce.gocev");
-        user1.setEmail("goce.gocev@mail.com");
-        user1.setPassword("Password123!");
-        role = this.roleRepository.findRoleByRoleName(RoleName.ASSISTANT);
-        user1.setRoleId(role.id().getId());
-        this.authenticationService.register(user1);
-
-        user1 = new UserForm();
-        user1.setFirstName("Кирил");
-        user1.setLastName("Наков");
-        user1.setUsername("kiril.nakov");
-        user1.setEmail("kiril.nakov@mail.com");
-        user1.setPassword("Password123!");
-        role = this.roleRepository.findRoleByRoleName(RoleName.ST_SLUZBA);
+        role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
         user1.setRoleId(role.id().getId());
         this.authenticationService.register(user1);
 
         return ResponseEntity.ok("FALA BOGU!!!");
     }
+
+//    @GetMapping("/populate")
+//    public ResponseEntity<String> populateDatabase(){
+//
+//        UserForm user1 = new UserForm();
+//        user1.setFirstName("Петко");
+//        user1.setLastName("Петков");
+//        user1.setUsername("171999");
+//        user1.setEmail("petko.petkov@mail.com");
+//        user1.setPassword("Password123!");
+//        Role role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//        UserForm user2 = new UserForm();
+//        user2.setFirstName("Трајко");
+//        user2.setLastName("Трајков");
+//        user2.setUsername("171998");
+//        user2.setEmail("trajko.trajkov@mail.com");
+//        user2.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
+//        user2.setRoleId(role.id().getId());
+//        this.authenticationService.register(user2);
+//
+//        UserForm user3 = new UserForm();
+//        user3.setFirstName("Аце");
+//        user3.setLastName("Ацев");
+//        user3.setUsername("171997");
+//        user3.setEmail("ace.acev@mail.com");
+//        user3.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
+//        user3.setRoleId(role.id().getId());
+//        this.authenticationService.register(user3);
+//
+//        user1 = new UserForm();
+//        user1.setFirstName("Алберт");
+//        user1.setLastName("Ајнштајн");
+//        user1.setUsername("171996");
+//        user1.setEmail("albert.einstein@mail.com");
+//        user1.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//        user1 = new UserForm();
+//        user1.setFirstName("Исак");
+//        user1.setLastName("Њутн");
+//        user1.setUsername("171995");
+//        user1.setEmail("isaac.newton@mail.com");
+//        user1.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.STUDENT);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//        user1 = new UserForm();
+//        user1.setFirstName("Васе");
+//        user1.setLastName("Васев");
+//        user1.setUsername("vase.vasev");
+//        user1.setEmail("vase.vasev@mail.com");
+//        user1.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.PRODEKAN);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//        user1 = new UserForm();
+//        user1.setFirstName("Carl");
+//        user1.setLastName("Sagan");
+//        user1.setUsername("carl.sagan");
+//        user1.setEmail("carl.sagan@mail.com");
+//        user1.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.PROFESSOR);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//
+//        user1 = new UserForm();
+//        user1.setFirstName("Stanley");
+//        user1.setLastName("Kubrick");
+//        user1.setUsername("stanley.kubrick");
+//        user1.setEmail("stanley.kubrick@mail.com");
+//        user1.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.PROFESSOR);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//        user1 = new UserForm();
+//        user1.setFirstName("Heywood");
+//        user1.setLastName("Floyd");
+//        user1.setUsername("heywood.floyd");
+//        user1.setEmail("heywood.floyd@mail.com");
+//        user1.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.PROFESSOR);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//        user1 = new UserForm();
+//        user1.setFirstName("David");
+//        user1.setLastName("Bowman");
+//        user1.setUsername("david.bowman");
+//        user1.setEmail("david.bowman@mail.com");
+//        user1.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.ASSISTANT);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//        user1 = new UserForm();
+//        user1.setFirstName("Гоце");
+//        user1.setLastName("Гоцев");
+//        user1.setUsername("goce.gocev");
+//        user1.setEmail("goce.gocev@mail.com");
+//        user1.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.ASSISTANT);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//        user1 = new UserForm();
+//        user1.setFirstName("Кирил");
+//        user1.setLastName("Наков");
+//        user1.setUsername("kiril.nakov");
+//        user1.setEmail("kiril.nakov@mail.com");
+//        user1.setPassword("Password123!");
+//        role = this.roleRepository.findRoleByRoleName(RoleName.ST_SLUZBA);
+//        user1.setRoleId(role.id().getId());
+//        this.authenticationService.register(user1);
+//
+//        return ResponseEntity.ok("FALA BOGU!!!");
+//    }
 
 
 //    @GetMapping("/populate")
