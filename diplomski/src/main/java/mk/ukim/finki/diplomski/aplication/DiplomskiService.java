@@ -12,8 +12,14 @@ import mk.ukim.finki.sharedkernel.domain.dto.UserDTO;
 import mk.ukim.finki.sharedkernel.domain.role.RoleName;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -390,7 +396,7 @@ public class DiplomskiService {
                 .collect(Collectors.toList());
     }
 
-    public void uploadFile(UUID diplomskaId, UUID mentorId, String file) {
+    public void uploadFile(UUID diplomskaId, UUID mentorId, MultipartFile file) {
         Diplomska diplomska = diplomskiRepository.getOne(new DiplomskaId(diplomskaId));
 
         if (!diplomska.getMentorId().getId().equals(mentorId)){
@@ -403,7 +409,14 @@ public class DiplomskiService {
             // TODO: exception
         }
 
-        diplomska.updateFilePath(file);
+        Path filePath = Paths.get("../public", file.getOriginalFilename());
+        try (OutputStream os = Files.newOutputStream(filePath)){
+            os.write(file.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        diplomska.updateFilePath(filePath.toString());
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
         // TODO: send mail - student, clenovi

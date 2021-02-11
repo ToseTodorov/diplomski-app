@@ -10,6 +10,7 @@ import mk.ukim.finki.sharedkernel.domain.dto.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -118,9 +119,9 @@ public class DiplomskiController {
         return ResponseEntity.ok(diplomskiService.getDiplomskiForMentor(UUID.fromString(userId)));
     }
 
-    @PostMapping("/upload-file") // cekor 4
+    @PostMapping(value = "/upload-file", consumes = {"multipart/form-data"}) // cekor 4
     public ResponseEntity uploadFile(@RequestParam String diplomskaId,
-                                     @RequestParam String file,
+                                     @RequestParam MultipartFile file,
                                      HttpServletRequest request) {
         String userId = request.getHeader("user");
         diplomskiService.uploadFile(UUID.fromString(diplomskaId), UUID.fromString(userId), file);
