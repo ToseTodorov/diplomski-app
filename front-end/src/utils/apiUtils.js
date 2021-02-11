@@ -40,6 +40,17 @@ export const diplomskiApiUtils = {
                 'role': user().roleName
             }
         })
+    },
+    postFile: (url, file) => {
+        let formData = new FormData();
+        formData.append("file", file);
+        return diplomskiApi.post(url, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'user': user().userId,
+                'role': user().roleName
+            }
+        });
     }
 };
 

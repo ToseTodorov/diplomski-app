@@ -36,7 +36,7 @@ class Diplomski extends Component {
 
     render() {
         let diplomskiHtml = this.state.diplomski.map((dip) => {
-            return <Diplomska data={dip} isUserLoggedIn={this.props.isUserLoggedIn}/>
+            return <Diplomska data={dip} isUserLoggedIn={this.props.isUserLoggedIn} key={dip.file}/>
         })
         return (
             <div className="container body-content">

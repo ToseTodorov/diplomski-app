@@ -6,6 +6,21 @@ const diplomskiService = {
     },
     getDiplomaList: () => {
         return diplomskiApiUtils.get("/api/diplomski/diploma-list");
+    },
+    getMentorDiplomaList: () => {
+        return diplomskiApiUtils.get("/api/diplomski/mentor-diplomski");
+    },
+    uploadFile: (diplomskaId, file) => {
+        return diplomskiApiUtils.post(`/api/diplomski/upload-file?diplomskaId=${diplomskaId}`, file);
+    },
+    getDummyDiplomski: () => {
+        return [
+            {
+                file: null,
+                statusNumber: 4,
+                status: "ok"
+            }
+        ]
     }
 };
 
