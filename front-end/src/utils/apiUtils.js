@@ -5,6 +5,7 @@ export const userManagementApiUtils = {
     get: (url) => {
         return userManagementApi.get(url, {
             headers: {
+                'Access-Control-Allow-Origin': '*',
                 'user': user().userId,
                 'role': user().roleName
             }
@@ -14,6 +15,7 @@ export const userManagementApiUtils = {
         const data = JSON.stringify(body);
         return userManagementApi.post(url, data, {
             headers: {
+                'Access-Control-Allow-Origin': '*',
                 'content-type': 'application/json',
                 'user': user().userId,
                 'role': user().roleName
@@ -26,6 +28,7 @@ export const diplomskiApiUtils = {
     get: (url) => {
         return diplomskiApi.get(url, {
             headers: {
+                'Access-Control-Allow-Origin': '*',
                 'user': user().userId,
                 'role': user().roleName
             }
@@ -35,6 +38,7 @@ export const diplomskiApiUtils = {
         const data = JSON.stringify(body);
         return diplomskiApi.post(url, data, {
             headers: {
+                'Access-Control-Allow-Origin': '*',
                 'content-type': 'application/json',
                 'user': user().userId,
                 'role': user().roleName
@@ -46,6 +50,7 @@ export const diplomskiApiUtils = {
         formData.append("file", file);
         return diplomskiApi.post(url, formData, {
             headers: {
+                'Access-Control-Allow-Origin': '*',
                 "Content-Type": "multipart/form-data",
                 'user': user().userId,
                 'role': user().roleName

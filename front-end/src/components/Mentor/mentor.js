@@ -1,31 +1,40 @@
-import React, {useEffect, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import diplomskiService from "./../../service/diplomskiService"
 import './../Dimplomski/diplomski.css'
 import MentorDiplomska from "./MentorDiplomska/mentorDiplomska";
 
-const Mentor = () => {
+class Mentor extends Component {
+    constructor(props) {
+        super(props);
 
-    let [diplomski, setDiplomski] = useState([]);
-    useEffect(() => {
-        diplomskiService.getMentorDiplomaList().then((response) => {
-            setDiplomski(response.data);
+        this.state = {
+            diplomski: []
+        };
+    }
+
+    componentDidMount() {
+        diplomskiService.getMentorDiplomaList().then((resp) => {
+            this.setState({diplomski: resp.data});
         });
-    }, []);
-    // useEffect(() => {
-    //     setDiplomski(diplomskiService.getDummyDiplomski());
-    // }, [])
+    }
 
-    let diplomskiHtml = diplomski.map((dip) => {
-        return <MentorDiplomska data={dip} key={dip.file}/>
-    });
+    rerenderParent = () => {
+        this.forceUpdate();
+    }
 
-    return (
-        <div className="container body-content">
-            <h4>Листа на дипломски</h4>
-            <hr/>
-            {diplomskiHtml}
-        </div>
-    );
-};
+    render() {
+        let diplomskiHtml = this.state.diplomski.map((dip) => {
+            return <MentorDiplomska data={dip} key={dip.id} rerenderParent={this.rerenderParent}/>
+        });
+
+        return (
+            <div className="container body-content">
+                <h4>Листа на дипломски</h4>
+                <hr/>
+                {diplomskiHtml}
+            </div>
+        );
+    }
+}
 
 export default Mentor;

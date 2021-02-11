@@ -11,7 +11,7 @@ const diplomskiService = {
         return diplomskiApiUtils.get("/api/diplomski/mentor-diplomski");
     },
     uploadFile: (diplomskaId, file) => {
-        return diplomskiApiUtils.post(`/api/diplomski/upload-file?diplomskaId=${diplomskaId}`, file);
+        return diplomskiApiUtils.postFile(`/api/diplomski/upload-file?diplomskaId=${diplomskaId}`, file);
     },
     getDummyDiplomski: () => {
         return [

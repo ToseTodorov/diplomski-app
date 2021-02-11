@@ -1,36 +1,41 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './../../Dimplomski/Diplomska/diplomska.css'
 import diplomskiService from "../../../service/diplomskiService";
 import {withRouter} from "react-router";
 
-
 const MentorDiplomska = (props) => {
     const currentDiplomska = props.data;
 
+    let [file, setFile] = useState({});
+
+    const onFileChange = (e) => {
+        setFile(e.target.files[0]);
+    }
+
     const onFileUpload = (e) => {
         e.preventDefault();
-        let file = document.getElementById('file-upload').files[0];
         if(file.type !== 'application/pdf'){
             alert("File must be in .pdf format!");
             return;
         }
-        diplomskiService.uploadFile(currentDiplomska.diplomskaId, file).then((response) => {
+        diplomskiService.uploadFile(currentDiplomska.id, file).then((response) => {
             alert("File has been uploaded!");
-            props.history.push("/mentor");
+            setFile({});
+            props.rerenderParent();
         })
     };
 
-    const file = () => {
+    const fileHtml = () => {
         if(currentDiplomska.file){
             return (
-                <a href={`http://localhost:8081/public/${currentDiplomska.file}`} target="_self">
+                <a href={`http://localhost:8081/${currentDiplomska.file}`} target="_blank">
                     Превземи
                 </a>
             );
         }
         if(currentDiplomska.statusNumber === 4){
             return [
-                <input type="file" className="btn" id="file-upload"/>,
+                <input type="file" className="btn" onChange={onFileChange}/>,
                 <button onClick={onFileUpload} className="btn btn-outline" style={{backgroundColor: "#f2f2f2", float: "right"}}>Upload</button>
             ];
         }
@@ -119,7 +124,7 @@ const MentorDiplomska = (props) => {
                         </td>
                         <td>
                             <strong>
-                                {file()}
+                                {fileHtml()}
                             </strong>
                         </td>
                     </tr>

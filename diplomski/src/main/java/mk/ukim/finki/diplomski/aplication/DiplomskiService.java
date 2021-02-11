@@ -11,11 +11,14 @@ import mk.ukim.finki.diplomski.domain.value.*;
 import mk.ukim.finki.sharedkernel.domain.dto.UserDTO;
 import mk.ukim.finki.sharedkernel.domain.role.RoleName;
 import mk.ukim.finki.sharedkernel.domain.user.Username;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -36,11 +39,13 @@ public class DiplomskiService {
     private final DiplomskiRepository diplomskiRepository;
     private final UserService userService;
     private final RoleService roleService;
+    private final String publicFolderPath;
 
-    public DiplomskiService(DiplomskiRepository diplomskiRepository, UserService userService, RoleService roleService) {
+    public DiplomskiService(DiplomskiRepository diplomskiRepository, UserService userService, RoleService roleService, @Value("${public.folder.path}") String folderPath) {
         this.diplomskiRepository = diplomskiRepository;
         this.userService = userService;
         this.roleService = roleService;
+        this.publicFolderPath = folderPath;
     }
 
     private boolean isInRole(@NonNull UserId userId, RoleName role){
@@ -410,16 +415,24 @@ public class DiplomskiService {
             // TODO: exception
         }
 
-        Username indeks = userService.findUsernameByUserId(diplomska.getStudentId().getId());
+        String indeks = userService.findUsernameByUserId(diplomska.getStudentId().getId()).getUsername();
 
-        Path filePath = Paths.get("../public/", indeks.getUsername() + ".pdf");
-        try (OutputStream os = Files.newOutputStream(filePath)){
+        String filePath = publicFolderPath + indeks + ".pdf";
+        File f = new File(filePath);
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+        try (OutputStream os = new FileOutputStream(filePath)){
             os.write(file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
 
-        diplomska.updateFilePath(filePath.toString());
+        diplomska.updateFilePath(indeks + ".pdf");
         diplomska.updateStatus();
         diplomskiRepository.saveAndFlush(diplomska);
         // TODO: send mail - student, clenovi

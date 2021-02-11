@@ -31,7 +31,7 @@ const Diplomska = (props) => {
             </a>;
         if (currentDiplomska.file) {
             file =
-                <a href={`http://localhost:8081/public/${currentDiplomska.file}`} target="_self">
+                <a href={`http://localhost:8081/${currentDiplomska.file}`} target="_self">
                     Превземи
                 </a>;
         }
