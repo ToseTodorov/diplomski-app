@@ -128,7 +128,22 @@ public class DiplomskiController {
         return ResponseEntity.ok().build();
     }
 
-    // TODO: cekor 5
+    @PostMapping("/validate-cekor5")
+    public ResponseEntity validateCekor5(@RequestParam String diplomskaId,
+                                           HttpServletRequest request) {
+        String userId = request.getHeader("user");
+        diplomskiService.validateCekor5(UUID.fromString(diplomskaId), UUID.fromString(userId));
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/submit-note")
+    public ResponseEntity submitNote(@RequestParam String diplomskaId,
+                                     @RequestParam String note,
+                                     HttpServletRequest request) {
+        String userId = request.getHeader("user");
+        diplomskiService.uploadNote(UUID.fromString(diplomskaId), note, UUID.fromString(userId));
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/komisija-diplomski")
     public ResponseEntity<List<DiplomskaFullDTO>> getDiplomskiForKomisija(HttpServletRequest request){
@@ -159,29 +174,15 @@ public class DiplomskiController {
         return ResponseEntity.ok().build();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @GetMapping("/populate")
-//    public ResponseEntity populate(){
-//        try {
-//            diplomskiService.populate();
-//            return ResponseEntity.ok().build();
-//        } catch (Exception e){
-//            e.printStackTrace();
-//            return ResponseEntity.badRequest().build();
-//        }
-//    }
+    @GetMapping("/populate")
+    public ResponseEntity populate(){
+        try {
+            diplomskiService.populate();
+            return ResponseEntity.ok().build();
+        } catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 }
