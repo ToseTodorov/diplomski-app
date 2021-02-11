@@ -16,6 +16,9 @@ const diplomskiService = {
     validateDiplomska: (diplomskaId) => {
         return diplomskiApiUtils.post(`/api/diplomski/validate-cekor5?diplomskaId=${diplomskaId}`, {});
     },
+    submitOdbrana: (obdrana) => {
+        return diplomskiApiUtils.post(`/api/diplomski/submit-odbrana`, obdrana);
+    },
     getDummyDiplomski: () => {
         return [
             {

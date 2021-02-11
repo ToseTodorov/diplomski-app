@@ -2,11 +2,18 @@ import React, {useState} from 'react';
 import './../../Dimplomski/Diplomska/diplomska.css'
 import diplomskiService from "../../../service/diplomskiService";
 import {withRouter} from "react-router";
+import TimePicker from 'react-time-picker';
+import "react-time-picker/dist/TimePicker.css"
+import DatePicker from "react-date-picker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const MentorDiplomska = (props) => {
     const currentDiplomska = props.data;
 
-    let [file, setFile] = useState({});
+    const [file, setFile] = useState({});
+    const [datePicked, setPickedDate] = useState(new Date());
+    const [timePicked, setTimePicked] = useState("10:00");
+    const [locationPicked, setLocationPicked] = useState("");
 
     const onFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -89,6 +96,59 @@ const MentorDiplomska = (props) => {
         return null;
     };
 
+    const onLocationChange = (e) => {
+        setLocationPicked(e.target.value);
+    };
+
+    const validateLocation = (e) => {
+        e.preventDefault();
+        let odbrana = {
+            diplomskaId: currentDiplomska.id,
+            date: `${datePicked.getDate()}.${datePicked.getMonth()}.${datePicked.getFullYear()}`,
+            time: timePicked,
+            location: locationPicked
+        };
+        diplomskiService.submitOdbrana(odbrana).then((resp) => {
+            props.rerenderParent();
+        });
+    }
+
+    const datePickerHtml = () => {
+        if(currentDiplomska.statusNumber === 7){
+            return (
+                <tr>
+                    <td style={{width: "30%"}}>
+                        <span className="fa fa-calendar"/>&nbsp;
+                        Локација и време
+                    </td>
+                    <td>
+                        <input type="text" onChange={onLocationChange}/>
+                        <DatePicker value={datePicked} onChange={date => setPickedDate(date)} format={"dd-MM-y"}/>
+                        <TimePicker value={timePicked} onChange={setTimePicked} format={"HH:mm"}/>
+                        <i
+                            className="fa fa-check-square"
+                            style={{float: "right", color: "green", fontSize: "x-large", cursor: "pointer"}}
+                            onClick={validateLocation}
+                        />
+                    </td>
+                </tr>
+            );
+        }
+        else if(currentDiplomska.statusNumber > 7){
+            return (
+                <tr>
+                    <td style={{width: "30%"}}>
+                        <span className="fa fa-calendar"/>&nbsp;
+                        Локација и време
+                    </td>
+                    <td>
+                        <strong>{currentDiplomska.location}, {currentDiplomska.date}, {currentDiplomska.time}</strong>
+                    </td>
+                </tr>
+            );
+        }
+        return null;
+    };
 
 
     return (
@@ -174,6 +234,7 @@ const MentorDiplomska = (props) => {
                         </td>
                     </tr>
                     {validateHtml()}
+                    {datePickerHtml()}
                     </tbody>
                 </table>
             </div>
